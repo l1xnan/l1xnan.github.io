@@ -1,4 +1,9 @@
-# 部署记录
+---
+title: 记录本次建站配置过程
+date: 2018-05-26 00:28:51
+tags: 备忘录
+---
+
 
 前置条件：安装`git`，`nodejs`
 
@@ -24,7 +29,7 @@ npm install -D hexo-deployer-git
 ```
 https://gitee.com/<username>/<username>.git
 ```
-
+<!-- more -->
 ### 修改配置文件
 
 ```
@@ -33,6 +38,7 @@ deploy:
   repo: https://gitee.com/<username>/<username>.git
   branch: master
 ```
+`branch` 可以是 `master` 分支，也可以是自定义的其他分支（如：`gh-pages`）
 
 部署上传
 
@@ -52,6 +58,7 @@ git add .
 git commit -m "初始化"
 git push origin src
 ```
+其中 `<git-repo-url>` 可以与 `_config.yml` 配置文件中，博客静态文件的 `deploy/repo` 相同，也可以是自己其他私有仓库的地址，避免直接公开博客源文件。
 
 ## 异地更新
 
@@ -130,7 +137,36 @@ $ git pull
 ### 其他主题推荐
 `hexo-theme-material`：https://github.com/viosey/hexo-theme-material
 
+
+
+## 优化体验
+如果用 VSCode 作为博客的编辑器，可以隐藏一些不必要的文件（如：配置完成后隐藏配置文件）来优化体验。可在`工作区配置`中添加：
+```json
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.deploy*": true,
+    "**/node_modules": true,
+    "*.json": true,
+    "*.lock": true,
+    "themes": true,
+    "source/_data": true,
+    "public": true,
+  }
+}
+```
+安装插件：
+* Markdown All in One
+* vscode-hexo
+
+
 ## 问题处理
+windows 下 git 出现恼人的 `warning: LF will be replaced by CRLF` 警告，修改 `git` 配置：
+
+```
+git config --global core.autocrlf false
+```
+
 在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行命令：
 ```
 hexo clean
