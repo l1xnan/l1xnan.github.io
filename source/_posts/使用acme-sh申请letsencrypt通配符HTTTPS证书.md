@@ -32,7 +32,7 @@ source ~/.zshrc
 
 <!-- more -->
 
-### 域名验证
+## 域名验证
 
 为了验证域名所有权，Let's Encrypt 支持两种方式来验证：
 
@@ -63,9 +63,9 @@ export Ali_Secret="AccessKeySecret"
 source ~/.zshrc
 ```
 
-### 颁发证书
+## 颁发证书
 
-#### 生成证书
+### 生成证书
 
 可以对单域名、多域名、泛域名进行颁发
 
@@ -111,7 +111,7 @@ acme.sh --issue --dns dns_ali -d 'mapledu.cn' -d '*.mapledu.cn'
 crontab -l
 ```
 
-#### 复制证书
+### 复制证书
 
 前面证书生成以后, 接下来需要把证书 copy 到真正需要用它的地方.
 
@@ -132,7 +132,7 @@ acme.sh --installcert -d "mapledu.cn" -d "*.mapledu.cn" \
 
 
 
-#### 颁发及安装证书
+### 颁发及安装证书
 
 也可以两个命令合到一块：
 
@@ -152,7 +152,7 @@ ssl_certificate   /etc/nginx/cert.d/mapledu.cn/fullchain.cer;
 ssl_certificate_key  /etc/nginx/cert.d/mapledu.cn/mapledu.cn.key;
 ```
 
-### 更新 acme.sh
+## 更新 acme.sh
 
 目前由于 acme 协议和 letsencrypt CA 都在频繁的更新, 因此 acme.sh 也经常更新以保持同步.
 
@@ -175,8 +175,6 @@ acme.sh  --upgrade  --auto-upgrade
 ```
 acme.sh --upgrade  --auto-upgrade  0
 ```
-
-## nginx 配置
 
 
 参考：
