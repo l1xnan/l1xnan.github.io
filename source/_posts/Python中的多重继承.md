@@ -39,6 +39,8 @@ class D(B, C):
         C.pong(self)
 ```
 
+<!-- more -->
+
 `B` 和 `C` 都实现了 `pong` 方法，只是输出结果不一样。那么在`D` 的实例上调用 `pong` 方法，我们运行的是哪一个 `pong` 方法呢？
 
 ```python
@@ -62,11 +64,11 @@ PONG: <__main__.D object at 0x000001B4167C10F0>
 若想把方法调用委托给超类，推荐的方式是使用内置的 `super()` 函数（注意: Python 3 和 Python 2 中 `super()` 使用上有细微差别）。然而，有时可能需要绕过方法解析顺序，直接调用某个超类的方法 -- 这样做有时更方便。例如，`D.ping` 方法可以这样写：
 
 ```python
-class D(B,C):
+class D(B, C):
 
     ... ...
 
-    def pring(self):
+    def ping(self):
         A.ping(self)
         pring('post-ping:', self)
 ```
