@@ -8,5 +8,6 @@
     "themes": true,
     "source/_data": true,
     "public": true,
-  }
+  },
+  "explorer.sortOrder": "modified"
 }
