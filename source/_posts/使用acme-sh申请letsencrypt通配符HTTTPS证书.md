@@ -3,8 +3,11 @@ layout: pages
 title: 使用 acme.sh 申请Let's Encrypt 通配符 HTTTPS 证书
 date: 2018-06-05 17:34:27
 tags: 
-    - 部署
-    - HTTPS
+  - 部署
+  - HTTPS
+  - 证书
+categories:
+  - 后端
 ---
 
 ## 安装证书
@@ -130,8 +133,6 @@ acme.sh --installcert -d "mapledu.cn" -d "*.mapledu.cn" \
     --reloadcmd "service nginx force-reload"
 ```
 
-
-
 ### 颁发及安装证书
 
 也可以两个命令合到一块：
@@ -147,6 +148,7 @@ acme.sh --issue --dns dns_ali -d 'mapledu.cn' -d '*.mapledu.cn'\
 ### nginx 配置
 
 nginx 配置是注意配置的是 `key-file` 和 `fullchain-file` 文件：
+
 ```
 ssl_certificate   /etc/nginx/cert.d/mapledu.cn/fullchain.cer;
 ssl_certificate_key  /etc/nginx/cert.d/mapledu.cn/mapledu.cn.key;
@@ -175,7 +177,6 @@ acme.sh  --upgrade  --auto-upgrade
 ```
 acme.sh --upgrade  --auto-upgrade  0
 ```
-
 
 参考：
 
