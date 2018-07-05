@@ -3,9 +3,13 @@ layout: pages
 title: SQLAlchemy Relationship 配置
 date: 2018-06-22 15:48:13
 tags:
- - python
- - sqlalchemy
- - sql
+ - Python
+ - SQLAlchemy
+ - ORM
+ - 数据库
+
+categories:
+  - ORM
 ---
 
 翻译自：[Relationship Configuration](http://docs.sqlalchemy.org/en/latest/orm/relationships.html)
@@ -35,7 +39,9 @@ class Child(Base):
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('parent.id'))
 ```
+
 <!-- more -->
+
 ## 多对一
 
 ```python
@@ -162,19 +168,16 @@ class Address(Base):
 
 ## 大数据下的配置
 
-
 ## 自定义访问
 
 ## 自定义集合实现
 
 ## Collection Internals
 
-
 # 特殊的关系持久模式
 
 ## 指向自己的行 / 相互依赖的行
 
 ## 可变主键 / 更新串联(Cascades)
-
 
 ## 关系 API

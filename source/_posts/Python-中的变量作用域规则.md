@@ -37,6 +37,8 @@ Traceback (most recent call last):
 UnboundLocalError: local variable 'b' referenced before assignment
 ```
 
+<!-- more -->
+
 首选 ① 输出 `3`。然后到 ② 执行不了，出现错误。书中解释：
 
     Python 编译函数的定义体时，它判断 b 是局部变量，因为在函数中给它赋值了。
@@ -120,3 +122,4 @@ UnboundLocalError: local variable 'b' referenced before assignment
     B （Built-in） 内建作用域
 
 它们以 `L –> E –> G –> B` 的规则查找，即：在局部找不到，便会去局部外的局部找（例如闭包），再找不到就会去全局找，再者去内建中找。
+（开坑，待续……）
