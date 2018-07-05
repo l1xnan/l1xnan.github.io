@@ -13,6 +13,117 @@ categories:
 协程、线程、进程的区别不在赘述。
 先看 《流畅的 Python》中协程的一个例子：
 
+## 协程基础
+
+### 简单实例
+
+```python
+>>> def simple_coroutine():     # ①
+...     print('-> 协程开始')
+...     x = yield               # ②
+...     print('-> 协程接收：', x)
+...
+>>> my_coro = simple_coroutine()
+>>> my_coro                      # ③
+<generator object simple_coroutine at 0x0000023E1AC54150>
+>>> next(my_coro)                # ④
+-> 协程开始
+>>> my_coro.send(42)             # ⑤
+-> 协程接收： 42
+Traceback (most recent call last):   # ⑥
+  File "<stdin>", line 1, in <module>
+StopIteration
+>>>
+```
+
+- ① 协程使用生成器函数定义：定义体重有 `yield` 关键字。
+- ④ 首选要调用 `next(...)` 函数，因为生成器还没有启动，没在 `yield` 语句处暂停，所以一开始发送数据。也可以用给生成器发送`None`代替：`my_coro,send(None)`，专业术语叫**预激生成器**。
+
+可用 `inspect.getgeneratorstate(...)` 查看协程状态：
+
+```python
+import inspect
+inspect.getgeneratorstate(...)
+```
+
+具体有协程从创建到结束有四种状态：
+
+- `GEN_CREATED`: 等待执行
+- `GEN_RUNNING`: 解析器正在执行
+- `GEN_SUSPENDED`: 在 `yield` 表达式出暂停执行
+- `GEN_CLOSED`: 执行结束
+
+只有在多线程应用中才能看到 `GEN_RUNNING` 状态。此外，生成器对象在自己身上调用 `getgeneratorstate` 函数能看到，可自行测试。
+
+<!-- more -->
+
+### 预激协程
+
+为了方便预激协程，《流畅的 Python》提供了一个预激协程的装饰器例子，可供参考：
+
+```python
+from functools import wraps
+def coroutine(func):
+    """装饰器：向前执行到第一个 `yield` 表达式，预激 `func`"""
+    @wraps(func)
+    def primer(*args, **kwargs):
+        gen = func(*args, **kwargs)
+        next(gen)
+        return gen
+
+    return primer
+```
+
+### 终止协程和异常处理
+
+在协程中，未处理的异常能导致协程终止
+Python 也为协程提供两个方法：
+
+- `generator.throw(exc_type[, exc_value[, traceback]])`：致使生成器在暂停 `yield` 表达式处抛出**指定**的异常。如果生成器处理了抛出的异常，代码会向前执行到下一个 `yield` 表达式，而产生的值会调用 `generator.throw` 方法得到返回值。如果生成器没有处理抛出的异常，异常会向上冒泡，传到调用方的上下文中。
+- `generator.close()`：只是生成器在暂停的 `yield` 表达式处抛出 `GeneratorExit` 异常。
+
+### 让协程返回值
+
+`return` 可以出现在生成器中，当生成器正常结束，执行 `return`。
+
+```python
+def test():
+    while True:
+        a = yield
+        if a == 10:
+            break
+    return a
+```
+
+```python
+>>> t = test()
+>>> t.send(None)
+>>> t.send(10)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration: 10
+>>>
+```
+
+```python
+>>> t = test()
+>>> import inspect
+>>> inspect.getgeneratorstate(t)
+'GEN_CREATED'
+>>> next(t)
+>>> inspect.getgeneratorstate(t)
+'GEN_SUSPENDED'
+>>> try:
+...     t.send(10)
+... except StopIteration as exc:
+...     result = exc.value
+...
+>>> result
+10
+```
+
+## 实例分析
+
 ```python
 def simple_coro(a):
     print('-> 开始: a =', a)
@@ -62,8 +173,6 @@ _________
 ¯¯¯¯¯¯¯¯¯¯| yield a + b  # 相当于 return a +b，然后暂停
           ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 ```
-
-<!-- more -->
 
 再看廖雪峰教程中的一个例子：
 
