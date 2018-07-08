@@ -3,7 +3,9 @@ layout: pages
 title: Python 中的多重继承
 date: 2018-06-29 23:21:01
 tags:
-    - Python
+  - Python
+  - 继承
+categories: Python
 ---
 
 节选自：《流畅的 Python》

@@ -2,56 +2,58 @@
 layout: pages
 title: VSCode 配置
 date: 2018-05-30 22:53:42
-tags: VSCode
+tags: 
+  - VSCode
+  - 编辑器
 ---
 
 # 必备插件
 
 ## 优化编辑器
 
-* Guides: 高亮缩进基准线
-* indent-rainbow: 优化缩进点
-* Better Comments： 优化注释
-* Terminal: 可以在编辑器底边栏添加一个控制台按钮，便于鼠标快速访问
-* Code Outline: 显示代码大纲
+- Guides: 高亮缩进基准线
+- indent-rainbow: 优化缩进点
+- Better Comments： 优化注释
+- Terminal: 可以在编辑器底边栏添加一个控制台按钮，便于鼠标快速访问
+- Code Outline: 显示代码大纲
 
 <!-- more -->
 
 ## 主题
 
-* Material Theme
+- Material Theme
 
 ## 效率工具
 
-* Auto Close Tag: 自动闭合 HTML 标签
-* Auto Rename Tag: 修改 HTML 标签时，自动修改匹配的标签
-* Path Intellisense: 路径完成提示
+- Auto Close Tag: 自动闭合 HTML 标签
+- Auto Rename Tag: 修改 HTML 标签时，自动修改匹配的标签
+- Path Intellisense: 路径完成提示
 
 ## 版本控制
 
-* gitignore
-* GitLents
+- gitignore
+- GitLents
 
 ## 语言相关
 
 Vue:
 
-* Vetur
+- Vetur
 
 Python：
 
-* Python
+- Python
 
 ## 代码检查、格式化
 
-* ESlint
-* Prettier
+- ESlint
+- Prettier
 
 ## Markdown 写作相关
 
-* Markdown All in One
-* Markdown Preview Enhanced
-* markdownlint
+- Markdown All in One
+- Markdown Preview Enhanced
+- markdownlint
 
 如果想让书写显得工整一点，配置 Markdown 换行设置为：
 
@@ -66,14 +68,14 @@ Python：
 
 `editor.wordWrap` 有如下几个配置：
 
-* `off` - 禁用折行
-* `on` - 视区折行
-* `wordWrapColumn` - 在 `“editor.wordWrapColumn”` 处折行
-* `bounded` - 在视区与 `“editor.wordWrapColumn”` 两者的较小者处折行
+- `off` - 禁用折行
+- `on` - 视区折行
+- `wordWrapColumn` - 在 `“editor.wordWrapColumn”` 处折行
+- `bounded` - 在视区与 `“editor.wordWrapColumn”` 两者的较小者处折行
 
 ## 其他
 
-* Polacode: 生成代码截图
+- Polacode: 生成代码截图
 
 # 配置
 
