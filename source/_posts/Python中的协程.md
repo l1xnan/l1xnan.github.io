@@ -10,10 +10,23 @@ categories:
   - Python
 ---
 
-协程、线程、进程的区别不在赘述。
-先看 《流畅的 Python》中协程的一个例子：
+## 概述
+
+Python 3.5 之前的协程是靠 `yield` 实现的，和生成器 `yield` 共用关键字，语义不明确，使用比较晦涩，很少有人使用（起码大多数爬虫程序用的是多线程）。Python 3.5 增加了 `async` 和 `await` 关键字（保留关键字，未正式确定，Python 3.7 正式确定），作为定义协程的专用关键字。协程才正式变得优雅可用，不过它的基础仍是基于 `yield` 的协程。作为基础，我们对其做一下简述。
+
+## 与生成器的不同
+
+协程、线程、进程的区别不在赘述。简述协程和生成器的区别：
+
+- 生成器是用于生成供迭代的数据
+- 协程是数据的消费者
+- 虽然在协程中会使用 `yield` 产生值，但这与迭代无关。
+
+也就是说，协程只是和生成器“碰巧”共用了 `yield` 关键词，其他无任何关联。
 
 ## 协程基础
+
+下面我们来分析下《流畅的 Python》中协程的一个例子：
 
 ### 简单实例
 
@@ -174,28 +187,10 @@ _________
           ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 ```
 
-再看廖雪峰教程中的一个例子：
+## yield from
 
-```python
-def consumer():
-    r = ''
-    while True:
-        n = yield r
-        if not n:
-            return
-        print('[CONSUMER] Consuming %s...' % n)
-        r = '200 OK'
+基础概念：
 
-def produce(c):
-    c.send(None)
-    n = 0
-    while n < 5:
-        n = n + 1
-        print('[PRODUCER] Producing %s...' % n)
-        r = c.send(n)
-        print('[PRODUCER] Consumer return: %s' % r)
-    c.close()
-
-c = consumer()
-produce(c)
-```
+- 委派生成器：包含 `yield from <iterable>` 表达式的生成器函数。
+- 子生成器：从 `yield from` 表达式中 `<iterable>` 部分获取的生成器（subgenerator）。
+- 调用方：调用委派生成器的客户端代码。
