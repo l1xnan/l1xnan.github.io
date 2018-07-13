@@ -9,5 +9,14 @@
     "source/_data": true,
     "public": true,
   },
-  "explorer.sortOrder": "modified"
+  "explorer.sortOrder": "modified",
+  "markdownlint.config": {
+    "MD030": {
+      "ul_single": 1,
+      "ol_single": 1,
+      "ul_multi": 1,
+      "ol_multi": 1
+    },
+    "MD029": "one_or_ordered",
+  },
 }
