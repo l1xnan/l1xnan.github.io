@@ -32,7 +32,7 @@ update-alternatives --install $HOME/.local/bin/python python /usr/bin/python3 20
 
 update-alternatives --install $HOME/.local/bin/python python /usr/bin/python2 10
 ```
-
+<!-- more -->
 ## 需要使用 sudo
 
 ```bash

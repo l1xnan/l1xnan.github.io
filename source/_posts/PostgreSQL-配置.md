@@ -36,7 +36,7 @@ apt-get install postgresql-10
 ```
 
 参见：[LINUX DOWNLOADS (UBUNTU)](https://www.postgresql.org/download/linux/ubuntu/)
-
+<!-- more -->
 ## 配置
 
 ### 修改系统 postgres 用户的密码
@@ -74,6 +74,40 @@ sudo -u postgres psql
 ```sql
 ALTER USER postgres WITH PASSWORD 'postgres';
 ```
+或
+```sql
+\password postgres
+```
 注：
 1. 密码 postgres 要用引号引起来
 2. 命令最后有分号 `;`
+
+
+## 用户、数据库
+进入系统 postgres 用户：
+```bash
+sudo su - postgres
+```
+进入 PostgreSQL 命令行
+```
+psql
+```
+创建角色
+```sql
+CREATE USER exampleUser WITH PASSWORD 'example-password';
+```
+创建数据库，并指定所有者：
+```sql
+create database exampleDB owner exampleUser;
+```
+将 `exampleDB` 数据库的所有权限都赋予 `exampleUser`。
+```sql
+GRANT ALL PRIVILEGES ON DATABASE exampleDB to exampleUser;
+```
+上述命令还可以在 bash 中完成，便于自动化部署：
+```
+sudo -u postgres createuser --superuser dbuser
+sudo -u postgres createdb -O dbuser exampledb
+```
+
+参见：[PostgreSQL新手入门](http://www.ruanyifeng.com/blog/2013/12/getting_started_with_postgresql.html)
