@@ -11,9 +11,9 @@ categories:
   - PostgreSQL
 ---
 
-## 介绍
+本文翻译自：[5 different ways to backup your PostgreSQL database using Python](https://medium.com/poka-techblog/5-different-ways-to-backup-your-postgresql-database-using-python-3f06cea4f51)
 
-翻译自：[5 different ways to backup your PostgreSQL database using Python](https://medium.com/poka-techblog/5-different-ways-to-backup-your-postgresql-database-using-python-3f06cea4f51)
+## 介绍
 
 如果您正在为您的应用程序运行 PostgreSQL 数据库，则可能需要运行备份。
 
@@ -32,6 +32,8 @@ pg_dump -h localhost -U postgres my_database | gzip > backup.gz
 ```
 
 但是如何使用 Python 进行数据库备份呢？让我向您展示几种可以实现这一目标的方法。
+
+<!-- more -->
 
 ## 用 subprocess
 
@@ -79,7 +81,7 @@ with gzip.open('backup.gz', 'wb') as f:
 import gzip
 import pexpect
 with gzip.open('backup.gz', 'wb') as f:
-  c = pexpect.spawn('pg_dump -h localhost -U postgres my_database)
+  c = pexpect.spawn('pg_dump -h localhost -U postgres my_database')
   f.write(c.read())
 ```
 
@@ -91,11 +93,11 @@ with gzip.open('backup.gz', 'wb') as f:
 import gzip
 from plumbum.cmd import pg_dump
 with gzip.open('backup.gz', 'wb') as f:
-   (pg_dump[“-h”, “localhost”, “-U”, “postgres”, “my_database”] > f)()
+   (pg_dump["-h", "localhost", "-U", "postgres", "my_database"] > f)()
 ```
 
-魔术重载！ 我喜欢这个代码片段使用 `>` 运算符来模仿 bash 中 IO 重定向的行为。这个库有许多使用管道运算符进行 IO 重定向的好例子。与前面的 2 个示例一样，此方法不会逐渐将转储流式传输到 gzip 压缩文件，因此仅适用于较小的数据库。
+魔术重载！ 我喜欢这个代码片段使用 `>` 运算符来模仿 bash 中 IO 重定向的行为。这个库有许多使用管道运算符进行 IO 重定向的[好例子](https://plumbum.readthedocs.io/en/latest/)。与前面的 2 个示例一样，此方法不会逐渐将转储流式传输到 gzip 压缩文件，因此仅适用于较小的数据库。
 
 ## 总结
 
-我向您展示了使用 python 调用 `pg_dump` 的 5 种不同的方式。如果您不想安装另一个第三方库，或者“魔术”让您感到害怕，那么 `subprocess` 示例绝对是您的选择。 然而，`sh` 示例更容易理解，并且在内存使用方面表现良好。对于生产用途，我会避开最后 3 个例子，因为它们往往会占用大量内存。此外，由于您是一个好的🐕，请务必测试您的备份恢复程序！
+我向您展示了使用 python 调用 `pg_dump` 的 5 种不同的方式。如果您不想安装另一个第三方库，或者“魔术”让您感到害怕，那么 `subprocess` 示例绝对是您的选择。 然而，`sh` 示例更容易理解，并且在内存使用方面表现良好。对于生产用途，我会避开最后 3 个例子，因为它们往往会占用大量内存。此外，由于您是一个好的 🐕，请务必测试您的备份恢复程序！
