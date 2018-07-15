@@ -124,24 +124,12 @@ crontab -l
 
 正确的使用方法是使用 --installcert 命令,并指定目标位置, 然后证书文件会被 copy 到相应的位置：
 
-```
+```bash
 acme.sh --installcert -d "mapledu.cn" -d "*.mapledu.cn" \
     --cert-file /etc/nginx/cert.d/mapledu.cn/mapledu.cn.cer\
     --key-file /etc/nginx/cert.d/mapledu.cn/mapledu.cn.key\
     --ca-file /etc/nginx/cert.d/mapledu.cn/ca.cer\
     --fullchain-file /etc/nginx/cert.d/mapledu.cn/fullchain.cer\
-    --reloadcmd "service nginx force-reload"
-```
-
-### 颁发及安装证书
-
-也可以两个命令合到一块：
-
-```bash
-acme.sh --issue --dns dns_ali -d 'mapledu.cn' -d '*.mapledu.cn'\
-    --installcert\
-    --key-file /etc/nginx/cert.d/mapledu.cn.key\
-    --fullchain-file /etc/nginx/cert.d/fullchain.ca\
     --reloadcmd "service nginx force-reload"
 ```
 
@@ -152,6 +140,25 @@ nginx 配置是注意配置的是 `key-file` 和 `fullchain-file` 文件：
 ```
 ssl_certificate   /etc/nginx/cert.d/mapledu.cn/fullchain.cer;
 ssl_certificate_key  /etc/nginx/cert.d/mapledu.cn/mapledu.cn.key;
+```
+
+特别是 `ssl_certificate` 项，应该配置生成的 `fullchain.cer`，而不是 `mapledu.cn.cer`。否则在微信小程序 https 证书验证中会出错。
+
+## 通用脚本
+
+也可以将颁发证书和安装证书两个命令合到一块，通用脚本如下：
+
+```bash
+domain="mapledu.cn"
+mkdir -p /etc/nginx/cert.d/$domain
+acme.sh -d "$domain" -d "*.$domain" \
+    --issue --dns dns_ali \
+    --installcert \
+    --cert-file /etc/nginx/cert.d/$domain/$domain.cer\
+    --key-file /etc/nginx/cert.d/$domain/$domain.key\
+    --ca-file /etc/nginx/cert.d/$domain/ca.cer\
+    --fullchain-file /etc/nginx/cert.d/$domain/fullchain.cer\
+    --reloadcmd "service nginx force-reload"
 ```
 
 ## 更新 acme.sh
