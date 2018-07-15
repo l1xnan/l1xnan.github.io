@@ -9,5 +9,6 @@
     "source/_data": true,
     "public": true,
   },
-  "explorer.sortOrder": "modified"
+  "explorer.sortOrder": "modified",
+  "editor.fontFamily": "'Sarasa Mono SC', Consolas, monospace",
 }
