@@ -5,18 +5,9 @@
     "**/node_modules": true,
     "*.json": true,
     "*.lock": true,
-    // "themes": true,
-    // "source/_data": true,
+    "themes": true,
+    "source/_data": true,
     "public": true,
   },
-  "explorer.sortOrder": "modified",
-  "markdownlint.config": {
-    "MD030": {
-      "ul_single": 1,
-      "ol_single": 1,
-      "ul_multi": 1,
-      "ol_multi": 1
-    },
-    "MD029": "one_or_ordered",
-  },
+  "explorer.sortOrder": "modified"
 }
