@@ -12,7 +12,7 @@ categories:
 
 ## 安装
 
-参见[oh-my-zsh 官网](https://ohmyz.sh/)
+参见 [oh-my-zsh 官网](https://ohmyz.sh/)
 首先安装 `zsh`
 ```
 apt install zsh
