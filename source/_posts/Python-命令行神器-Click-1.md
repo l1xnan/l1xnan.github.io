@@ -54,7 +54,7 @@ Options:
   --help  Show this message and exit
 ```
 
-click 是基于装饰器的。在上述示例中的 ① 行，我们在函数上使用 `@click.command()` 装饰器来将该函数变成一个命令行工具。注意在程序的 ② 行，我们使用了了 `click.echo()` 函数，它等价于 `print`，不过它的参数更丰富：
+click 是基于装饰器的。在上述示例中的 ① 行，我们在函数上使用 `click.command()` 装饰器来将该函数变成一个命令行工具。注意在程序的 ② 行，我们使用了了 `click.echo()` 函数，它等价于 `print`，不过它的参数更丰富：
 
 ```python
 click.echo(message=None, file=None, nl=True, err=False, color=None)
@@ -64,7 +64,7 @@ click.echo(message=None, file=None, nl=True, err=False, color=None)
 
 ## 嵌套命令
 
-现实中我们的命令行程序可能要实现好多功能，那么单纯的用一个指令带一堆选项或者参数的方式可能不够用，这是我们可以用 `@click.group()` 定义嵌套命令来解决。然后我们用 `add_command` 函数，将子命令绑定到嵌套命令主函数上：
+现实中我们的命令行程序可能要实现好多功能，那么单纯的用一个指令带一堆选项或者参数的方式可能不够用，这是我们可以用 `click.group()` 定义嵌套命令来解决。然后我们用 `add_command` 函数，将子命令绑定到嵌套命令主函数上：
 
 ```python
 import click

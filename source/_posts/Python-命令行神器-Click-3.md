@@ -19,7 +19,7 @@ def cli():
     pass
 ```
 
-如果你的 `@click.command` 没有定义 `help` 参数，则程序会用函数体的 `docstring` 内容代替。
+如果你的 `click.command()` 没有定义 `help` 参数，则程序会用函数体的 `docstring` 内容代替。
 
 <!-- more -->
 
