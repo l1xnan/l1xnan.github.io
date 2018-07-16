@@ -25,5 +25,7 @@ categories:
 | `!:x-y` | 上一条命令从 x 到 y 的参数      |
 | `!:n*`  | 上一条命令从 n 开始到最后的参数 |
 | `!*`    | 上一条命令的所有参数            |
-
-参考资料：[高效使用命令行](https://talk.linuxtoy.org/cli-tips/#1)
+<!-- more -->
+参考资料：
+* [高效使用命令行](https://talk.linuxtoy.org/cli-tips/#1)
+* [有哪些命令行的软件堪称神器？](https://www.zhihu.com/question/59227720)
