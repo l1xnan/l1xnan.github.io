@@ -117,7 +117,7 @@ Options:
 import click
 
 @click.command()
-@click.option('--count', default=1, help='number of greetings')
+@click.option('--count', "-c", default=1, type=click.INT, help='number of greetings')
 @click.argument('name')
 def hello(count, name):
     for x in range(count):
@@ -131,14 +131,14 @@ $ python hello.py --help
 Usage: hello.py [OPTIONS] NAME
 
 Options:
-  --count INTEGER  number of greetings
+  -c, --count INTEGER  number of greetings
   --help           Show this message and exit.
 ```
 
-如 ② ，我们使用 `@click.option` 定义命令行的参数，在其中我们定义可以定义：
+我们使用 ` @click.option` 定义命令行的参数：
 
-- 在 `option` 函数第一个参数中定义 `--number` 参数名。
-- 在 `option` 函数第二个参数中定义 `-n` **短**参数名。
+- 在 `option` 函数第一个参数中定义 `--count` 命令行选项名。
+- 在 `option` 函数第二个参数中定义 `-c` 命令行**短**选项名。
 - `default` 定义参数的默认值
 - `type` 定义参数的类型
 - `help` 定义命令的帮助信息
