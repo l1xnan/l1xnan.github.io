@@ -1,13 +1,12 @@
 ---
-layout: pages
 title: oh-my-zsh 配置
-date: 2018-07-15 10:28:27
 tags:
   - shell
   - Linux
-
 categories:
   - Linux
+abbrlink: 55474
+date: 2018-07-15 10:28:27
 ---
 
 ## 安装

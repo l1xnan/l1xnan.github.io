@@ -1,11 +1,10 @@
 ---
-layout: pages
 title: Python 中的变量作用域规则
-date: 2018-07-01 12:46:24
 tags:
   - Python
-
 categories: Python
+abbrlink: 4039
+date: 2018-07-01 12:46:24
 ---
 
 在《流畅的 Python》一书的 7.4 节讲《变量作用域规则》一节，提到如下例子：

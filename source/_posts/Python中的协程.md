@@ -1,13 +1,12 @@
 ---
-layout: pages
 title: Python中的协程
-date: 2018-07-04 23:01:14
 tags:
   - Python
   - 协程
-
 categories:
   - Python
+abbrlink: 47856
+date: 2018-07-04 23:01:14
 ---
 
 ## 概述

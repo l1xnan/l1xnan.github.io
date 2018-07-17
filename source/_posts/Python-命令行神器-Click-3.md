@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: Python 命令行神器 Click（三）细节
-date: 2018-07-16 23:14:02
 tags:
   - Python
   - 命令行
 categories:
   - Python
+abbrlink: 755
+date: 2018-07-16 23:14:02
 ---
 
 ## 命令行应用帮助

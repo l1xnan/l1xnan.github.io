@@ -1,14 +1,13 @@
 ---
-layout: pages
 title: MongoEngine 查询
-date: 2018-07-16 02:02:22
 tags:
   - MongoDB
   - Python
   - ORM
-
 categories:
   - MongoDB
+abbrlink: 62733
+date: 2018-07-16 02:02:22
 ---
 
 ## 数据库查询

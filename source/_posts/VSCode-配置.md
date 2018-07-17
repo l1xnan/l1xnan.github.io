@@ -1,10 +1,10 @@
 ---
-layout: pages
 title: VSCode 配置
-date: 2018-05-30 22:53:42
-tags: 
+tags:
   - VSCode
   - 编辑器
+abbrlink: 57001
+date: 2018-05-30 22:53:42
 ---
 
 # 必备插件

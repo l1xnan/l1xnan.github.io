@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: bash 快捷命令
-date: 2018-07-15 23:00:13
 tags:
   - Linux
   - bash
 categories:
   - Linux
+abbrlink: 1738
+date: 2018-07-15 23:00:13
 ---
 
 ## 历史记录相关快捷命令

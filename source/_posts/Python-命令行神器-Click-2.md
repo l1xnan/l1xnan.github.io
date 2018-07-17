@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: Python 命令行神器 Click（二）打包
-date: 2018-07-16 22:33:14
 tags:
   - Python
   - 命令行
 categories:
   - Python
+abbrlink: 4615
+date: 2018-07-16 22:33:14
 ---
 
 ## 介绍
@@ -69,7 +69,7 @@ $ yourscript
 Hello World!
 ```
 
-## 包中的脚本
+## 包中的命令行应用
 
 如果您的脚本正在增长，并且您希望切换到包含在 Python 包中的脚本，我们只需要做很少的更改就能达到目的。 我们假设您的目录结构更改为：
 

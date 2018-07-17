@@ -1,14 +1,13 @@
 ---
-layout: pages
 title: Python 协程与 async/await
-date: 2018-07-10 19:25:42
 tags:
   - Python
   - 协程
   - 异步
-
 categories:
   - Python
+abbrlink: 59429
+date: 2018-07-10 19:25:42
 ---
 
 ## 为什么引入 async/await

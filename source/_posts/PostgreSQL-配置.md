@@ -1,13 +1,12 @@
 ---
-layout: pages
 title: PostgreSQL 配置
-date: 2018-07-13 23:44:57
 tags:
   - Linux
   - PostgreSQL
-
-categories: 
+categories:
   - PostgreSQL
+abbrlink: 58460
+date: 2018-07-13 23:44:57
 ---
 
 ## 安装

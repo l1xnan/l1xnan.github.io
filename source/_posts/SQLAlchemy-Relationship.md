@@ -1,15 +1,14 @@
 ---
-layout: pages
 title: SQLAlchemy Relationship 配置
-date: 2018-06-22 15:48:13
 tags:
- - Python
- - SQLAlchemy
- - ORM
- - 数据库
-
+  - Python
+  - SQLAlchemy
+  - ORM
+  - 数据库
 categories:
   - ORM
+abbrlink: 47469
+date: 2018-06-22 15:48:13
 ---
 
 翻译自：[Relationship Configuration](http://docs.sqlalchemy.org/en/latest/orm/relationships.html)

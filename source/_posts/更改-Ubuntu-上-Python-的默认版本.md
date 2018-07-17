@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: 更改 Ubuntu 上 Python 的默认版本
-date: 2018-07-13 22:11:20
 tags:
   - Ubuntu
   - Linux
 categories:
   - Linux
+abbrlink: 63235
+date: 2018-07-13 22:11:20
 ---
 
 通常 Python 用户使用非系统 Python 发行版，如 Miniconda。这些 Python 发行版通常允许在 Python 版本之间轻松切换。但是，在必须使用系统 Python 的情况下，可以使用 `update-alternatives` 持久切换默认的 Python 版本。具体步骤如下：

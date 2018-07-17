@@ -1,14 +1,13 @@
 ---
-layout: pages
 title: 用 Python 备份 PostgreSQL 数据库的 5 种方法
-date: 2018-07-15 01:20:52
 tags:
   - Python
   - PostgreSQL
   - 备份
-
 categories:
   - PostgreSQL
+abbrlink: 55646
+date: 2018-07-15 01:20:52
 ---
 
 本文翻译自：[5 different ways to backup your PostgreSQL database using Python](https://medium.com/poka-techblog/5-different-ways-to-backup-your-postgresql-database-using-python-3f06cea4f51)

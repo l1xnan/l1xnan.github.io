@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: 阿里云 ECS Ubuntu 配置
-date: 2018-07-13 23:11:28
 tags:
   - 服务器
   - Linux
 categories:
   - Linux
+abbrlink: 8642
+date: 2018-07-13 23:11:28
 ---
 
 环境：Ubuntu 18.04

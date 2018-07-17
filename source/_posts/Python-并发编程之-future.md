@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: Python 并发编程之 future
-date: 2018-07-08 15:55:36
 tags:
   - Python
   - 并发
 categories:
   - Python
+abbrlink: 39146
+date: 2018-07-08 15:55:36
 ---
 
 Python 中的并发主要涉及三种：多进程、多线程、协程。

@@ -1,11 +1,11 @@
 ---
-layout: pages
 title: Python 进度条神器 tqdm
-date: 2018-07-16 17:00:57
 tags:
   - Python
 categories:
   - Python
+abbrlink: 46192
+date: 2018-07-16 17:00:57
 ---
 
 ## 安装

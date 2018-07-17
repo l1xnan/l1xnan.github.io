@@ -1,6 +1,6 @@
 ---
-layout: pages
 title: Python 内建函数 type
+abbrlink: 22083
 date: 2018-07-14 10:03:34
 tags:
 ---

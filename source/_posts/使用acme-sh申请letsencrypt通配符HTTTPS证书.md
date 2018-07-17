@@ -1,13 +1,13 @@
 ---
-layout: pages
 title: 使用 acme.sh 申请Let's Encrypt 通配符 HTTTPS 证书
-date: 2018-06-05 17:34:27
-tags: 
+tags:
   - 部署
   - HTTPS
   - 证书
 categories:
   - 后端
+abbrlink: 46579
+date: 2018-06-05 17:34:27
 ---
 
 ## 安装证书

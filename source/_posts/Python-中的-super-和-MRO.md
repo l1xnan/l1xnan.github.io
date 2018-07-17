@@ -1,10 +1,10 @@
 ---
-layout: pages
 title: Python 中的 super() 和 MRO
-date: 2018-06-30 23:03:21
 tags:
   - Python
 categories: Python
+abbrlink: 1663
+date: 2018-06-30 23:03:21
 ---
 
 术语：

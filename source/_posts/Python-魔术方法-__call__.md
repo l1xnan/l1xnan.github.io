@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: Python 魔术方法之 __call__
-date: 2018-07-08 22:13:55
 tags:
   - Python
   - 魔术方法
 categories:
   - Python
+abbrlink: 28705
+date: 2018-07-08 22:13:55
 ---
 
 在 Python 中一切皆对象，就是否能通过函数操作符`()`来调用，我们可将对象分为可调用对象和不可调用对象。我们通过 `def` 自定义的函数是可调用对象；一般情况下，类的实例不是可调用对象。可以用内置函数 `callable()` 来检测目标是否可调用：

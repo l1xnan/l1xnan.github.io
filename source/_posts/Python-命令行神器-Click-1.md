@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: Python 命令行神器 Click（一）快速上手
-date: 2018-07-16 16:58:34
 tags:
   - Python
   - 命令行
 categories:
   - Python
+abbrlink: 15308
+date: 2018-07-16 16:58:34
 ---
 
 ## 简介

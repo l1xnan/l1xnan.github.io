@@ -1,12 +1,12 @@
 ---
-layout: pages
 title: 关于 JavaScript 闭包的简单例子
-date: 2018-07-05 16:19:52
 tags:
   - JavaScript
   - 闭包
 categories:
   - JavaScript
+abbrlink: 25528
+date: 2018-07-05 16:19:52
 ---
 
 于控制台中运行如下例子：
