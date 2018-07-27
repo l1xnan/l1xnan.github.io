@@ -38,6 +38,8 @@ uk_users = User.objects(country='uk')
 uk_pages = Page.objects(author__country='uk')
 ```
 
+<!-- more -->
+
 ### 查询操作符
 
 在查询中也可以使用操作符，只要将其加在关键字的双下划线之后即可：
