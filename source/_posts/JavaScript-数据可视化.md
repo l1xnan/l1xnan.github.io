@@ -58,4 +58,4 @@ date: 2018-09-09 12:29:50
 
 ## Highcharts
 
-另一个比较流行的数据可视化框架，有[中文文档](https://www.hcharts.cn/)，网上和 Echarts 对比的文章较多，可自行查阅。有些方面比 Echarts 更强大易用。
+另一个比较流行的数据可视化框架，有[中文文档](https://www.hcharts.cn/)，网上和 Echarts 对比的文章较多，可自行查阅。有些方面比 Echarts 更强大易用。不过其[商用授权费](https://highcharts.com.cn/highcharts)用大部分国内公司会望而却步，单个开发者授权为`7900元`。
