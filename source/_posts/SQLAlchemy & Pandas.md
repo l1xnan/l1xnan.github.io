@@ -9,7 +9,7 @@ date: 2018-10-06 23:36:52
 ---
 
 做数据分析如果用到了数据库作为数据源，pandas 提供了 `read_sql` 函数，那么如果数据库使用了 `SQLAlchemy` ORM 该怎么利用这个函数呢？
-
+官方文档上说明可以使用，只是说的比较笼统，具体代码如下：
 ```python
 df = pd.read_sql(query.statement, query.session.bind)
 ```
