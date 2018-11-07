@@ -22,6 +22,9 @@ date: 2018-07-10 18:49:00
 
 ## Web 框架
 
+[molten](https://github.com/Bogdanp/molten): 用于使用Python 3.6及更高版本构建HTTP API的最小，可扩展，快速且高效的框架。
+[responder](https://github.com/kennethreitz/responder): 
+
 ### Flask
 
 ### Sanic
@@ -46,3 +49,6 @@ date: 2018-07-10 18:49:00
 
 [voluptuous](https://github.com/alecthomas/voluptuous)：数据验证库 [![GitHub stars](https://img.shields.io/github/stars/badges/shields.svg?style=social&label=Stars)]((https://github.com/alecthomas/voluptuous)
 
+## Shell
+
+[xonsh](https://github.com/xonsh/xonsh):  xonsh是一种shell语言和命令提示符。 与其他shell不同，xonsh基于Python，添加了额外的语法，可以轻松调用子进程命令，操作环境和处理文件系统。 xonsh命令提示符为用户提供对xonsh语言的交互式访问。
