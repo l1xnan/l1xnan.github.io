@@ -15,7 +15,7 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://l1xnan.gitee.io
 root: /
-permalink: /posts/:year:month/:abbrlink.html
+permalink: posts/:year:month/:abbrlink.html
 permalink_defaults:
 
 # Directory
