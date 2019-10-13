@@ -1,12 +1,12 @@
 {
   "files.exclude": {
     "**/.git": true,
-    "**/.deploy*": true,
+    // "**/.deploy*": true,
     "**/node_modules": true,
     "*.json": true,
     "*.lock": true,
-    "themes": true,
-    "source/_data": true,
+    // "themes": true,
+    // "source/_data": true,
     "public": true,
   },
   "explorer.sortOrder": "modified",
