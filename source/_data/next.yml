@@ -189,7 +189,7 @@ site_state: true
 # Value after `||` delimiter is the name of Font Awesome icon. If icon (with or without delimiter) is not specified, globe icon will be loaded.
 social:
   GitHub: https://github.com/l1xnan || github
-  语❤雀: https://www.yuque.com/l1xnan || rocket
+  语 雀: https://www.yuque.com/l1xnan || rocket
   #E-Mail: mailto:yourname@gmail.com || envelope
   #Weibo: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
@@ -737,7 +737,7 @@ add_this_id:
 # ---------------------------------------------------------------
 
 # Baidu Analytics
-baidu_analytics: # <app_id>
+baidu_analytics: 4fa172c954b02033befdc702e873be33
 
 # Growingio Analytics
 # Copyright 2015-2018 GrowingIO, Inc. More info available at https://www.growingio.com
@@ -791,7 +791,7 @@ busuanzi_count:
   post_views_icon: eye
 
 # Tencent analytics
-tencent_analytics: # <app_id>
+tencent_analytics: 66481636
 
 # Tencent MTA
 tencent_mta: # <app_id>
@@ -816,7 +816,7 @@ algolia_search:
 # Local Search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
