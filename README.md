@@ -175,3 +175,9 @@ hexo clean
 
 * [Hexo 官方文档](https://hexo.io/zh-cn/docs/)
 * [NexT 主题文档](http://theme-next.iissnan.com/)
+
+
+## Github Actions
+```
+git remote add origin https://github.com/l1xnan/blog.git
+```

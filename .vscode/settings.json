@@ -3,12 +3,15 @@
     "**/.git": true,
     // "**/.deploy*": true,
     "**/node_modules": true,
-    "*.json": true,
-    "*.lock": true,
+    "*lock.json": true,
+    "db.json":true,
     // "themes": true,
     // "source/_data": true,
     "public": true,
   },
   "explorer.sortOrder": "modified",
-  "editor.fontFamily": "'Sarasa Mono SC', Consolas, monospace",
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.fontFamily": "Noto Sans Mono CJK SC, Sarasa Mono SC, monospace"
+},
 }

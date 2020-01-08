@@ -1,0 +1,49 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+
+      - name: nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      
+      - name: env
+        env:
+          ACTION_DEPLOY_KEY: ${{secrets.ACTIONS_DEPLOY_KEY}}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name 'l1xnan'
+          git config --global user.email 'l1xnan@qq.com'
+          git clone https://github.com/theme-next/hexo-theme-next themes/next
+      
+      - name: install
+        run: npm install
+
+      - name: build
+        run: npm run build
+
+      # - name: deploy
+      #   uses: peaceiris/actions-gh-pages@v2.9.0
+      #   env:
+      #     ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+      #     PUBLISH_BRANCH: gh-pages
+      #     PUBLISH_DIR: ./public
+
+      #   with:
+      #     emptyCommits: false
+      #     username: 'l1xnan'
+      #     useremail: 'l1xnan@qq.com'

@@ -82,7 +82,8 @@ theme: next
 deploy:
   type: git
   # repo: https://gitee.com/l1xnan/l1xnan.git
-  repo: https://github.com/l1xnan/l1xnan.github.io.git
+  # repo: https://github.com/l1xnan/l1xnan.github.io.git
+  repo: git@github.com:l1xnan/l1xnan.github.io.git
   branch: master
 
 search:
