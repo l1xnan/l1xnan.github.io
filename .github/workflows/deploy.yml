@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy Hexo
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: nodejs
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: 12.x
       
       - name: env
         env:
@@ -35,15 +35,3 @@ jobs:
 
       - name: build
         run: npm run build
-
-      # - name: deploy
-      #   uses: peaceiris/actions-gh-pages@v2.9.0
-      #   env:
-      #     ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-      #     PUBLISH_BRANCH: gh-pages
-      #     PUBLISH_DIR: ./public
-
-      #   with:
-      #     emptyCommits: false
-      #     username: 'l1xnan'
-      #     useremail: 'l1xnan@qq.com'
