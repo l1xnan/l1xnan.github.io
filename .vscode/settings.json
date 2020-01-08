@@ -1,7 +1,7 @@
 {
   "files.exclude": {
     "**/.git": true,
-    // "**/.deploy*": true,
+    "**/.deploy*": true,
     "**/node_modules": true,
     "*lock.json": true,
     "db.json":true,
