@@ -91,3 +91,7 @@ search:
   field: post
   format: html
   limit: 10000
+
+cdn:
+  enable: true
+  base: https://cdn.jsdelivr.net/gh/l1xnan/l1xnan.github.io@master/
