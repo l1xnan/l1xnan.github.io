@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="自动索引SQLite 会在一定情况下创建一个自动索引用于帮助提高一个查询的效率，官方文档说明如下：  https:&#x2F;&#x2F;www.sqlite.org&#x2F;schematab.htmlThe sqlite_schema.name column will hold the name of the object. (UNIQUE and PRIMARY KEY constraints on tables ca">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQLite 中的自动索引">
+<meta property="og:url" content="https://l1xnan.github.io/posts/202303/46209.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="自动索引SQLite 会在一定情况下创建一个自动索引用于帮助提高一个查询的效率，官方文档说明如下：  https:&#x2F;&#x2F;www.sqlite.org&#x2F;schematab.htmlThe sqlite_schema.name column will hold the name of the object. (UNIQUE and PRIMARY KEY constraints on tables ca">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-27T00:14:51.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.840Z">
+<meta property="article:author" content="l1xnan">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/202303/46209.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/202303/46209.html","path":"posts/202303/46209.html","title":"SQLite 中的自动索引"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SQLite 中的自动索引 | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">1.</span> <span class="nav-text">自动索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WITHOUT-ROWID"><span class="nav-number">2.</span> <span class="nav-text">WITHOUT ROWID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/202303/46209.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SQLite 中的自动索引 | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQLite 中的自动索引
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-27 00:14:51" itemprop="dateCreated datePublished" datetime="2023-03-27T00:14:51+00:00">2023-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>712</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="自动索引"><a href="#自动索引" class="headerlink" title="自动索引"></a>自动索引</h2><p>SQLite 会在一定情况下创建一个自动索引用于帮助提高一个查询的效率，官方文档说明如下：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.sqlite.org/schematab.html">https://www.sqlite.org/schematab.html</a><br>The sqlite_schema.name column will hold the name of the object. (<a target="_blank" rel="noopener" href="https://www.sqlite.org/lang_createtable.html#uniqueconst">UNIQUE</a> and <a target="_blank" rel="noopener" href="https://www.sqlite.org/lang_createtable.html#primkeyconst">PRIMARY KEY</a> constraints on tables cause SQLite to create <a target="_blank" rel="noopener" href="https://www.sqlite.org/fileformat2.html#intschema">internal indexes</a> with names of the form “sqlite_autoindex_TABLE_N” where TABLE is replaced by the name of the table that contains the constraint and N is an integer beginning with 1 and increasing by one with each constraint seen in the table definition. In a <a target="_blank" rel="noopener" href="https://www.sqlite.org/withoutrowid.html">WITHOUT ROWID</a> table, there is no sqlite_schema entry for the PRIMARY KEY, but the “sqlite_autoindex_TABLE_N” name is set aside for the PRIMARY KEY as if the sqlite_schema entry did exist. This will affect the numbering of subsequent UNIQUE constraints. The “sqlite_autoindex_TABLE_N” name is never allocated for an <a target="_blank" rel="noopener" href="https://www.sqlite.org/lang_createtable.html#rowid">INTEGER PRIMARY KEY</a>, either in rowid tables or WITHOUT ROWID tables.</p>
+</blockquote>
+<p>简单翻译一下：</p>
+<blockquote>
+<p><code>sqlite_schema.name</code> 列将保存对象的名称。(表上的 <code>UNIQUE</code> 和 <code>PRIMARY KEY</code> 约束会使 SQLite 创建内部索引，其名称形式为 <code>"sqlite_autoindex_TABLE_N"</code>，其中 <code>TABLE</code> 被包含约束的表的名称所取代，<code>N</code> 是一个从 <code>1</code> 开始的整数，在表定义中看到的每个约束都加 <code>1</code>。在一个 <code>WITHOUT ROWID</code> 表中，没有用于主键的 <code>sqlite_schema</code> 条目，但是 <code>"sqlite_autoindex_TABLE_N"</code> 名称被设置为主键，就好像 <code>sqlite_schema</code> 条目确实存在一样。这将影响后续 <code>UNIQUE</code> 约束的编号。<code>"sqlite_autoindex_TABLE_N"</code> 名称永远不会分配给一个 <code>[INTEGER PRIMARY KEY](https://www.sqlite.org/lang_createtable.html#rowid)</code>，无论是在 <code>rowid</code> 表中还是没有 <code>rowid</code> 表中。</p>
+</blockquote>
+<p>可以总结出来如下几条结论：</p>
+<ol>
+<li>表字段如果存在 <code>UNIQUE</code> 和 <code>PRIMARY KEY</code> 约束，那么 SQLite 会自动给字段创建 <code>"sqlite_autoindex_TABLE_N"</code> 索引；</li>
+<li>对于 <code>PRIMARY KEY</code> 约束，如果字段类型是 <code>INTEGER</code>，不会添加自动索引；</li>
+<li>在一个 <code>WITHOUT ROWID</code> 表中，主键的自动索引不会出现在 <code>sqlite_master</code> 表中 (可以在 <code>pragma_index_list('TABLE')</code> 中查看)。</li>
+</ol>
+<p>实际例子看一下，如果本地没有条件，在 <a target="_blank" rel="noopener" href="https://sqliteonline.com/">https://sqliteonline.com/</a> 可以在线直接执行查看效果。<br>先创建 <code>users</code> 和 <code>posts</code> 表：</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> users</span><br><span class="line">(</span><br><span class="line">    id    <span class="type">integer</span> <span class="keyword">not</span> <span class="keyword">null</span></span><br><span class="line">        <span class="keyword">primary</span> key autoincrement,</span><br><span class="line">    email TEXT    <span class="keyword">not</span> <span class="keyword">null</span> <span class="keyword">unique</span>,</span><br><span class="line">    name  TEXT</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> INDEX IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> users_name_index</span><br><span class="line">    <span class="keyword">ON</span> users (name);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> posts</span><br><span class="line">(</span><br><span class="line">    title   TEXT <span class="keyword">not</span> <span class="keyword">null</span></span><br><span class="line">        <span class="keyword">primary</span> key,</span><br><span class="line">    content TEXT</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+<p>查看下索引情况：</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.type, a.name, tbl_name, b.name <span class="keyword">as</span> col_name</span><br><span class="line"><span class="keyword">FROM</span> sqlite_master a, pragma_index_xinfo(a.name) b</span><br><span class="line"><span class="keyword">WHERE</span> type <span class="operator">=</span> <span class="string">'index'</span></span><br><span class="line">  <span class="keyword">and</span> b.name <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">null</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>name</th>
+<th>tbl_name</th>
+<th>col_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>index</td>
+<td>sqlite_autoindex_users_1</td>
+<td>users</td>
+<td>email</td>
+</tr>
+<tr>
+<td>index</td>
+<td>users_name_index</td>
+<td>users</td>
+<td>name</td>
+</tr>
+<tr>
+<td>index</td>
+<td>sqlite_autoindex_posts_1</td>
+<td>posts</td>
+<td>title</td>
+</tr>
+</tbody></table>
+<p>可以看到 <code>users.id</code> 并没有创建自动索引，非 <code>integer</code> 类型的 <code>primary key</code> 约束和 <code>unique</code> 约束创建了自动索引。</p>
+<h2 id="WITHOUT-ROWID"><a href="#WITHOUT-ROWID" class="headerlink" title="WITHOUT ROWID"></a>WITHOUT ROWID</h2><p>再看 <code>WITHOUT ROWID</code> 情况，先创建表 <code>words</code>。</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> words</span><br><span class="line">(</span><br><span class="line">    name TEXT <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    <span class="keyword">desc</span> TEXT <span class="keyword">UNIQUE</span></span><br><span class="line">) <span class="keyword">WITHOUT</span> ROWID;</span><br></pre></td></tr></tbody></table></figure>
+<p>查询 <code>sqlite_master</code> 表：</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> tbl_name<span class="operator">=</span><span class="string">'words'</span> <span class="keyword">and</span> type<span class="operator">=</span><span class="string">'index'</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>结果为：</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>name</th>
+<th>tbl_name</th>
+<th>rootpage</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>index</td>
+<td>sqlite_autoindex_words_2</td>
+<td>words</td>
+<td>9</td>
+<td>null</td>
+</tr>
+</tbody></table>
+<p>表中自动索引序号是 <code>2</code>，并不是 <code>1</code>。接着查询：</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pragma_index_list(<span class="string">'words'</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>结果为：</p>
+<table>
+<thead>
+<tr>
+<th>seq</th>
+<th>name</th>
+<th>unique</th>
+<th>origin</th>
+<th>partial</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>sqlite_autoindex_words_2</td>
+<td>1</td>
+<td>u</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>sqlite_autoindex_words_1</td>
+<td>1</td>
+<td>pk</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>注意 <code>orign</code> 字段，主键 <code>pk</code> 对应的是 <code>sqlite_autoindex_words_1</code>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.sqlite.org/schematab.html">The Schema Table</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sqlite.org/pragma.html#pragma_index_info">Pragma statements supported by SQLite</a></li>
+<li><a target="_blank" rel="noopener" href="https://sqliteonline.com/">https://sqliteonline.com/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/202001/40769.html" rel="prev" title="自动部署博客">
+                  <i class="fa fa-chevron-left"></i> 自动部署博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"e969eb7490160db64c466484d3d37c50"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

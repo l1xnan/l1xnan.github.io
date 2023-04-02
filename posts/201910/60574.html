@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="如今的开发工具基本都是上开箱即用，并能收获不错的开发体验。但是在中文环境下，开发工具默认的字体设置往往不尽人意。连续几天在几个同事的代码界面上发现了&amp;nbsp;&amp;nbsp;宋体&amp;nbsp;、 Monospaced&amp;nbsp;、 微软雅黑&amp;nbsp;、 楷体&amp;nbsp;等，五花八门…… 作为一个贫穷的常年穿格格杉的程序员😂，折腾不了衣服，就只能折腾自己编辑器的主题和字体。话说新装一个编辑器第一件事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序员的字体">
+<meta property="og:url" content="https://l1xnan.github.io/posts/201910/60574.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="如今的开发工具基本都是上开箱即用，并能收获不错的开发体验。但是在中文环境下，开发工具默认的字体设置往往不尽人意。连续几天在几个同事的代码界面上发现了&amp;nbsp;&amp;nbsp;宋体&amp;nbsp;、 Monospaced&amp;nbsp;、 微软雅黑&amp;nbsp;、 楷体&amp;nbsp;等，五花八门…… 作为一个贫穷的常年穿格格杉的程序员😂，折腾不了衣服，就只能折腾自己编辑器的主题和字体。话说新装一个编辑器第一件事">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://l1xnan.github.io/posts/201910/60574/pycharm.png">
+<meta property="og:image" content="https://l1xnan.github.io/posts/201910/60574/vscode.png">
+<meta property="og:image" content="https://l1xnan.github.io/posts/201910/60574/font.png">
+<meta property="og:image" content="https://l1xnan.github.io/posts/201910/60574/CascadiaCode.gif">
+<meta property="og:image" content="https://l1xnan.github.io/posts/201910/60574/FiraCode.png">
+<meta property="article:published_time" content="2019-10-12T22:20:20.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.832Z">
+<meta property="article:author" content="l1xnan">
+<meta property="article:tag" content="字体">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://l1xnan.github.io/posts/201910/60574/pycharm.png">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/201910/60574.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/201910/60574.html","path":"posts/201910/60574.html","title":"程序员的字体"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>程序员的字体 | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%AC%E7%BA%BF%E5%AD%97%E4%BD%93%E5%92%8C%E9%9D%9E%E8%A1%AC%E7%BA%BF%E5%AD%97%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">衬线字体和非衬线字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93"><span class="nav-number">2.</span> <span class="nav-text">等宽字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%B8%AD%E7%9A%84%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93"><span class="nav-number">3.</span> <span class="nav-text">控制台中的等宽字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E8%BF%9E%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">字体连字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E6%A0%87%E5%AD%97%E4%BD%93"><span class="nav-number">5.</span> <span class="nav-text">图标字体</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/201910/60574.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="程序员的字体 | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          程序员的字体
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-12 22:20:20" itemprop="dateCreated datePublished" datetime="2019-10-12T22:20:20+00:00">2019-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%97%E4%BD%93/" itemprop="url" rel="index"><span itemprop="name">字体</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>如今的开发工具基本都是上开箱即用，并能收获不错的开发体验。但是在中文环境下，开发工具默认的字体设置往往不尽人意。连续几天在几个同事的代码界面上发现了&nbsp;&nbsp;<code>宋体</code>&nbsp;、 <code>Monospaced</code>&nbsp;、 <code>微软雅黑</code>&nbsp;、 <code>楷体</code>&nbsp;等，五花八门……</p>
+<p>作为一个贫穷的常年穿格格杉的程序员😂，折腾不了衣服，就只能折腾自己编辑器的主题和字体。话说新装一个编辑器第一件事就是选一款心怡的主题，配置一个让眼睛舒服的字体。主题撇开不讲，下面说一下字体。</p>
+<span id="more"></span>
+
+<h2 id="衬线字体和非衬线字体"><a href="#衬线字体和非衬线字体" class="headerlink" title="衬线字体和非衬线字体"></a>衬线字体和非衬线字体</h2><p>不太严谨的说，我们可以把字体分为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%A1%AC%E7%BA%BF%E4%BD%93">衬线字体</a>和<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E6%97%A0%E8%A1%AC%E7%BA%BF%E4%BD%93">非衬线字体</a> (sans-serif)。视觉上，衬线字体在字的笔画开始、结束的地方有额外的装饰，而且笔画的粗细会有所不同；无衬线字体没有这些额外的装饰，笔画的粗细差不多，线条统一。我们在生活中，常见的衬线字体的代表有：宋体、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Times%20New%20Roman/9286728">Times New Roman</a>，只要使用过 Word，相信大家对这两款字体不会陌生。除此之外，在政府文件中常见到的仿宋字体，在儿童读物上常见到楷体都属于衬线字体。常见的非衬线字体有绝对不会陌生的微软雅黑、黑体等，西方最常见的应该是 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Helvetica/3241042">Helvetica </a>系列字体，关于这个字体，有兴趣可以读一下 <a target="_blank" rel="noopener" href="https://book.douban.com/subject/20441938/">《字体的故事》</a>中的介绍，非常有意思，网上比较容易找到电子版。</p>
+<p>衬线字体多用于传统的正文印刷中，适合在纸质中显示大段文字，它能带来更好的可读性，我们见到的绝大多数书籍的正文基本上都为衬线字体；而非衬线字体多用于简短、突出的文段中，如：文章标题、PPT。随着计算机的兴起，衬线字体因为笔画丰富和计算机的渲染机制，在较小字号的情况下，往往会有很强烈的锯齿感，特别前几年显示器分辨率普遍不高的情况下（在这里吐槽下前些年联想笔记本万年不变的 1366×768🙃），非常影响美观。这时候就轮到非衬线字体登场了，在中国伴随 Windows 而来就是大名鼎鼎的&nbsp;<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BE%AE%E8%BD%AF%E9%9B%85%E9%BB%91%E4%BD%93/988302">微软雅黑</a>。</p>
+<p>拿办公三件套来说，Word 编辑的文字一般用于办公打印，推荐使用宋体、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%80%9D%E6%BA%90%E5%AE%8B%E4%BD%93/20787850">思源宋体</a>等。PPT 讲究设计感，有各种设计感强的艺术字体、手写体等，根据喜好自己可以发挥。如果是中规中矩的场合，建议还是选用常规的非衬线字体，如果微软雅黑用腻了，可以尝试<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%80%9D%E6%BA%90%E9%BB%91%E4%BD%93/14919098">思源黑体</a>等；在 Excel 中，如果做的表格不用于打印，而仅做电子版查阅，建议更改为微软雅黑等非衬线字体。Chrome 浏览器中，建议标准字体设置为非衬线字体。各项软件的的菜单栏，如果你发现默认的是宋体，而软件又支持更改字体，建议选择微软雅黑。版权类的字体中，有许多优秀美观个性化的选择，可以自行搜索。</p>
+<h2 id="等宽字体"><a href="#等宽字体" class="headerlink" title="等宽字体"></a>等宽字体</h2><p>上面介绍了字体的基本情况，下面轮到我们程序员的专属 - <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AD%89%E5%AE%BD%E5%AD%97%E4%BD%93/8434037">等宽字体</a> (monospaced font) 登场了。早期等宽字体只是因为技术限制，无法进行字母宽度的比例调整，因此将每个字元都制作成一样的宽度，从而形成了等宽字体。现在我们的技术早已脱离了这种限制，但是这类字体又在程序员群体中找到了新生 - 它非常适合显示代码，让代码看着更加整齐清晰。现代的等宽字体往往会针对代码环境做专门的设计，例如：专门设计在传统字体中容易混淆的 <code>0</code> 和 <code>O</code> ， <code>1</code> 和 <code>l</code> 等，增加区分度，避免误读。同时它们一般都为非衬线字体，便于电脑屏幕中显示更多行的代码，我们的代码字号设置往往不太大，这时候非常适合非衬线类字体的发挥。</p>
+<p>Windows 环境下，常见的等宽字体有 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Consolas/630820">Consolas</a>，是 Windows 环境下比较常用的编程字体。VSCode 编辑器开箱即用的默认字体就是 Consolas。前几年为了兼顾中文显示，网上流传有 Consolas 和微软雅黑的混合封装体 - Yahei Consolas Hybrid，体验非常好，网上这款字体的版本比较多，不同人技术不同，封装的略有差异，有些版本可能存在缺陷，可自行选择。</p>
+<p>现在的代码编辑器多支持设置第二字体，大多数英文等宽字体的字符集不包含中文字符，这时候可以显示为设置的第二字体，可以设置为微软雅黑。比较有代表的是 <a target="_blank" rel="noopener" href="http://www.jetbrains.com/">Jetbrains</a> 家的编辑器都支持这个设置。</p>
+<img src="/posts/201910/60574/pycharm.png" class="">
+
+<p>VSCode 中可以在字体设置中追加微软雅黑字体，这样对中文字符就可以用微软雅黑字体显示。</p>
+<img src="/posts/201910/60574/vscode.png" class="">
+
+<p>比较常用的等宽字体还有 Source Code Pro、DejaVu Sans Mono、Ubuntu Mono 等，还有斜体比较个性花哨的&nbsp;Operator Mono（非免费）：</p>
+<img src="/posts/201910/60574/font.png" class="">
+
+
+
+<h2 id="控制台中的等宽字体"><a href="#控制台中的等宽字体" class="headerlink" title="控制台中的等宽字体"></a>控制台中的等宽字体</h2><p>Windows 多年来对控制台的体验并不重视，打开 CMD 或者 Powershell，往往看到的是锯齿感很明显的宋体。因为控制台中对字体限制更加严格，在控制台设置中，可选则的字体并不多，更改代码页才能选择 Consolas 字体，但是这样又总会出现各种字符显示问题。在这里推荐使用 <code>等宽更纱黑体</code> ，完美适配控制台环境，并能收获很好的中文显示效果。对第三方的控制台，往往能比较灵活的设置字体，不过仍然推荐使用等宽更纱黑体，非常好用。PyCharm、VSCode 等控制台中的字体设置同代码中字体设置，可以随意搭配。</p>
+<p>随着微软拥抱开源，对控制台的体验也开始着手改进，推出了 Windows Terminal，默认字体为 Consolas 显示效果比较好。然后又随着  Windows Terminal&nbsp;发布了适合 Terminal 环境的字体 -&nbsp;Cascadia Code，比较个性，同时支持<strong>连字</strong>，可尝试体验。</p>
+<img src="/posts/201910/60574/CascadiaCode.gif" class="" title="CascadiaCode">
+
+
+<h2 id="字体连字"><a href="#字体连字" class="headerlink" title="字体连字"></a>字体连字</h2><p>上面的 GIF 动画，为我们展示了字符的连字显示，可以将 <code>&gt;=</code>&nbsp;显示为两个字符宽度的&nbsp;<code>≥</code>&nbsp;，可以将 <code>===</code>&nbsp;显示为 3 个字符宽度的&nbsp;<code>≡</code>&nbsp;，算是比较有意思的一种体验。用在代码中，可以增加我们代码的可读性。比较遗憾的是，Consolas 字体不支持连字。而所有支持连字的代码字体中，集大成的是 <a target="_blank" rel="noopener" href="https://github.com/tonsky/FiraCode">Fira Code</a>，连字效果非常丰富。</p>
+<img src="/posts/201910/60574/FiraCode.png" class="" title="FiraCode">
+
+<p>如果使用的是 JetBrains 家的编辑器，2020 年以后版本的编辑器已经自带了 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> 字体，且支持连子，开箱即用，我们只要根据喜好配置第二字体既可。<br>因为前端代码中 <code>===</code> 、 <code>&gt;=</code> 等运算符使用的比较多，以及随着 ES6 中箭头函数 <code>=&gt;</code> 和扩展运算符 <code>...</code> 等的普及，支持连字的字体非常适合用于前端代码，目前就是使用 <code>Fira Code</code> 作为自己前端代码的首选字体。在 Python 代码中这种情况相对较少，如果使用 PyCharm 使用 JetBrains Mono 既可。</p>
+<h2 id="图标字体"><a href="#图标字体" class="headerlink" title="图标字体"></a>图标字体</h2><p>我们对终端进行美化时，可能接触到 <strong><a target="_blank" rel="noopener" href="https://www.nerdfonts.com/">Nerd Fonts</a></strong> 字体。它会针对已有的字体打 patch，把一些 icon 字符插入进去。如针对 FiraCode 有对应的补丁字体 FiraCode Nerd Font。</p>
+<hr>
+<p>本文中许多地方仅出于自己的直观认知，未查阅资料印证，不严谨和错误的地方欢迎指正！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%97%E4%BD%93/" rel="tag"># 字体</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/201909/26161.html" rel="prev" title="语雀">
+                  <i class="fa fa-chevron-left"></i> 语雀
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/202001/40769.html" rel="next" title="自动部署博客">
+                  自动部署博客 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ccea2906f70f4c5bda8af581f2356a0e"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

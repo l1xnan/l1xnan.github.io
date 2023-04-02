@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Python 中的并发主要涉及三种：多进程、多线程、协程。 相信提到多线程和多进程大家首先想到的是标准库 threading 和 multiprocessing。在 Python 中，这两个标准库几乎成了 Python 并发编程的代名词。对于这两个标准库，无论网络还是书籍，可查阅的资料非常丰富，我们不多做介绍。本文主要介绍从 Python3.2 开始被纳入标准库的 concurrent.futur">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 并发编程之 future">
+<meta property="og:url" content="https://l1xnan.github.io/posts/201807/39146.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="Python 中的并发主要涉及三种：多进程、多线程、协程。 相信提到多线程和多进程大家首先想到的是标准库 threading 和 multiprocessing。在 Python 中，这两个标准库几乎成了 Python 并发编程的代名词。对于这两个标准库，无论网络还是书籍，可查阅的资料非常丰富，我们不多做介绍。本文主要介绍从 Python3.2 开始被纳入标准库的 concurrent.futur">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-08T15:55:36.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.832Z">
+<meta property="article:author" content="l1xnan">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/201807/39146.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/201807/39146.html","path":"posts/201807/39146.html","title":"Python 并发编程之 future"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 并发编程之 future | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">模块接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Executor"><span class="nav-number">1.1.</span> <span class="nav-text">Executor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">1.2.</span> <span class="nav-text">ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ProcessPoolExecutor"><span class="nav-number">1.3.</span> <span class="nav-text">ProcessPoolExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Future"><span class="nav-number">1.4.</span> <span class="nav-text">Future</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">应用实例</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/201807/39146.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python 并发编程之 future | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 并发编程之 future
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-08 15:55:36" itemprop="dateCreated datePublished" datetime="2018-07-08T15:55:36+00:00">2018-07-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Python 中的并发主要涉及三种：多进程、多线程、协程。</p>
+<p>相信提到多线程和多进程大家首先想到的是标准库 <code>threading</code> 和 <code>multiprocessing</code>。在 Python 中，这两个标准库几乎成了 Python 并发编程的代名词。对于这两个标准库，无论网络还是书籍，可查阅的资料非常丰富，我们不多做介绍。本文主要介绍从 Python3.2 开始被纳入标准库的 <code>concurrent.futures</code>，它是对 <code>threading</code> 和 <code>multiprocessing</code> 进一步的封装和高级别的抽象，并暴露出统一的接口，帮助开发者非常方便的实现异步调用。最初的提案见于 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-3148/">PEP 3148</a>。</p>
+<span id="more"></span>
+
+<h2 id="模块接口"><a href="#模块接口" class="headerlink" title="模块接口"></a>模块接口</h2><p><code>concurrent.futures</code> 模块提供的接口很简单，提供了类：</p>
+<ul>
+<li><code>Executor</code>：一个抽象类，提供异步执行调用的方法。 我们一般使用其具体的子类，而不直接调用它。</li>
+<li><code>ThreadPoolExecutor</code>：是 <code>Executor</code> 的子类。提供了线程池的支持。</li>
+<li><code>ProcessPoolExecutor</code>：是 <code>Executor</code> 的子类。提供了线程池的支持。把工作分配给多个 Python 进程处理。因此，如果需要做 CPU 密集型处理，使用这个模块能绕开 GIL，利用所有可用的 CPU 核心。</li>
+<li><code>Future</code>：封装了可调用的异步执行。 其实例由 <code>Executor.submit()</code> 创建，表示可能已经完成或者尚未完成的延迟计算。</li>
+</ul>
+<p>以及模块函数：</p>
+<ul>
+<li><code>await(fs, timeout=None, return_when=ALL_COMPLETED)</code>：等待由 <code>fs</code> 给出的 <code>Future</code> 实例（可能由不同的 <code>Executor</code> 实例创建）完成。返回一个命名的 2 元组的集合。第一个集合，名为 <code>done</code>，包含在等待完成之前完成（完成或被取消）的 future。第二个集合，名为 <code>not_done</code>，包含未完成的 future。</li>
+<li><code>as_completed(fs, timeout=None)</code>：返回由 <code>fs</code> 给出的 <code>Future</code> 实例（可能由不同的 <code>Executor</code> 实例创建）的迭代器，它们在结束（结束状态可能是完成或被取消）时产生 future。 <code>fs</code> 复制的任何期货都将被退回一次。 在调用 <code>as_completed()</code> 之前完成的任何 future 都将首先产生。 如果异步函数超时，则调用 <code>__next__()</code> 返回迭代器时会引发 <code>concurrent.futures.TimeoutError</code>。 <code>timeout</code> 可以是 <code>int</code> 或 <code>float</code>。如果未指定 <code>timeout</code> 或 <code>None</code>，则等待时间没有限制。</li>
+</ul>
+<h3 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">concurrent</span>.futures.Executor</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它提供如下方法：</p>
+<ul>
+<li><code>submit(fn, *args, **kwargs)</code>：将可调用的 <code>fn</code> 调度为 <code>fn(* args ** kwargs)</code> 并返回表示可调用执行的 <code>Future</code> 对象。</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">1</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    future = executor.submit(<span class="built_in">pow</span>, <span class="number">323</span>, <span class="number">1235</span>)</span><br><span class="line">    <span class="built_in">print</span>(future.result())</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>map(func, *iterables, timeout=None, chunksize=1)</code>：类似于 <code>map(func, *iterables)</code>，但是 <code>func</code> 是异步执行。若想并发运行多个可调用的对象可调用此函数。</p>
+<ul>
+<li><code>func</code>：需要异步执行的函数。</li>
+<li><code>*iterables</code>：可迭代对象，如列表等。每一次 <code>func</code> 执行，都会从 <code>iterables</code> 中取参数。</li>
+<li><code>timeout</code>：设置每次异步操作的超时时间。它的值可以是 <code>int</code> 或 <code>float</code>，如果操作超时，会返回 <code>raisesTimeoutError</code>；如果不指定 timeout 参数，则不设置超时间。</li>
+</ul>
+</li>
+<li><p><code>shutdown(wait=True)</code>：向执行者发出信号，表示当目前待处理的期货执行完毕时，它应该释放它正在使用的任何资源。 在关闭后调用 <code>Executor.submit()</code> 和 <code>Executor.map()</code> 将引发 <code>RuntimeError</code>。</p>
+</li>
+</ul>
+<p><code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code>，是 <code>Executor</code> 的子类，它们都实现了通用的 <code>Executor</code> 接口，因此使用 <code>concurrent.futures</code> 模块能特别轻松地把基于线程的方案转成基于进程的方案。</p>
+<h3 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPoolExecutor</span>(max_workers=<span class="literal">None</span>, thread_name_prefix=<span class="string">''</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>看官网中的<a target="_blank" rel="noopener" href="https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example">实例</a>，我们稍加改造：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures <span class="keyword">as</span> futures</span><br><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"></span><br><span class="line">URLS = [<span class="string">'http://www.baidu.com/'</span>,</span><br><span class="line">        <span class="string">'http://www.qq.com/'</span>,</span><br><span class="line">        <span class="string">'http://www.sina.com.cn/'</span>,</span><br><span class="line">        <span class="string">'http://www.sohu.com/'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Retrieve a single page and report the URL and contents</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_url</span>(<span class="params">url, timeout</span>):</span><br><span class="line">    <span class="keyword">with</span> urllib.request.urlopen(url, timeout=timeout) <span class="keyword">as</span> conn:</span><br><span class="line">        <span class="keyword">return</span> conn.read()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 with 语句来确保及时清理线程</span></span><br><span class="line"><span class="keyword">with</span> futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    <span class="comment"># 开启加载每个 future，并用它们的 URL 来标记 future</span></span><br><span class="line">    future_to_url = {executor.submit(load_url, url, <span class="number">60</span>): url <span class="keyword">for</span> url <span class="keyword">in</span> URLS}</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">list</span>(futures.as_completed(future_to_url)))</span><br><span class="line">    <span class="keyword">for</span> future <span class="keyword">in</span> futures.as_completed(future_to_url):</span><br><span class="line">        url = future_to_url[future]</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = future.result()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'%r generated an exception: %s'</span> % (url, exc))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'%r page is %d bytes'</span> % (url, <span class="built_in">len</span>(data)))</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="ProcessPoolExecutor"><a href="#ProcessPoolExecutor" class="headerlink" title="ProcessPoolExecutor"></a>ProcessPoolExecutor</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ProcessPoolExecutor</span>(max_workers=<span class="literal">None</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其继承自 <code>Executor</code>，于其行为几乎一致。但是在 <code>map()</code> 方法中，使用 <code>ProcessPoolExecutor</code> 时，此方法将迭代器切换为多个块，并将其作为单独的任务提交到池中。 可以通过将 <code>chunksize</code> 设置为正整数来指定这些块的（近似）大小。 对于非常长的迭代，使用较大的 <code>chunksize</code> 值可以显着提高性能，而默认大小为 <code>1</code>。使用 <code>ThreadPoolExecutor</code> 时，<code>chunksize</code> 无效。</p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Future</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>它提供了如下方法（简单机翻一下￣ □ ￣｜｜）：</p>
+<ul>
+<li><p><code>cancel()</code><br>尝试取消调用。如果调用当前正在执行并且不能被取消，则该方法将返回 <code>False</code>，否则调用将被取消，并且该方法将返回 <code>True</code>。</p>
+</li>
+<li><p><code>cancelled()</code><br>如果调用成功取消，则返回 <code>True</code>。</p>
+</li>
+<li><p><code>running()</code><br>如果调用当前正在执行并且无法取消，则返回 <code>True</code>。</p>
+</li>
+<li><p><code>done()</code><br>如果调用成功取消或完成运行，则返回 <code>True</code>。</p>
+</li>
+<li><p><code>result(timeout=None)</code><br>返回调用返回的值。如果调用尚未完成，则此方法将等待到 timeout 秒。如果调用在 <code>timeout</code> 秒内没有完成，则将产生 <code>concurrent.futures.TimeoutError</code>。 <code>timeout</code> 可以是 <code>int</code> 或 <code>float</code>。如果未指定 <code>timeout</code> 或 <code>None</code>，则等待时间没有限制。<br>如果 future 在完成之前被取消，则抛出 <code>CancelledError</code> 错误。<br>如果这个调用在执行过程中抛出异常，这种方法也将引发相同的异常。</p>
+</li>
+<li><p><code>exception(timeout=None)</code><br>返回调用引发的异常。如果调用尚未完成，则此方法将等待到 <code>timeout</code> 秒。如果调用在 <code>timeout</code> 秒内没有完成，则将产生 <code>concurrent.futures.TimeoutError</code>。 <code>timeout</code> 可以是 <code>int</code> 或 <code>float</code>。如果未指定 <code>timeout</code> 或 <code>None</code>，则等待时间没有限制。<br>如果未来在完成之前被取消，则 <code>CancelledError</code> 将被提出。<br>如果调用在未提高的情况下完成，则返回 <code>None</code>。</p>
+</li>
+<li><p><code>add_done_callback(fn)</code><br>将可调用 fn 附加到未来。 fn 将被调用，将来作为其唯一的参数，当未来被取消或完成运行时。<br>添加的 <code>callables</code> 按它们被添加的顺序被调用，并且总是在属于添加它们的进程的线程中被调用。如果可调用引发了 <code>Exception</code> 子类，它将被记录并被忽略。如果可调用引发了 <code>BaseException</code> 子类，则该行为是未定义的。<br>如果未来已经完成或被取消，<code>fn</code> 将立即被调用。</p>
+</li>
+</ul>
+<h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><!--
+```python
+def download_many(cc_list):
+    cc_list = cc_list[:5] ➊
+    with futures.ThreadPoolExecutor(max_workers=3) as executor: ➋
+        to_do = []
+        for cc in sorted(cc_list): ➌
+            future = executor.submit(download_one, cc) ➍
+            to_do.append(future) ➎
+            msg = 'Scheduled for {}: {}'
+            print(msg.format(cc, future)) ➏
+    results = []
+    for future in futures.as_completed(to_do): ➐
+        res = future.result() ➑
+        msg = '{} result: {!r}'
+        print(msg.format(future, res)) ➒
+        results.append(res)
+    return len(results)
+``` -->
+
+<p>综上，我们可以看到使用 <code>concurrent.future</code> 模块进行多线程、多进程编程会比用 <code>threading</code> 和 <code>multiprocessing</code> 简单许多。</p>
+<p>参见：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.dongwm.com/archives/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-PoolExecutor%E7%AF%87/">使用 Python 进行并发编程 - PoolExecutor 篇</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/201807/25528.html" rel="prev" title="关于 JavaScript 闭包的简单例子">
+                  <i class="fa fa-chevron-left"></i> 关于 JavaScript 闭包的简单例子
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/201807/9553.html" rel="next" title="Python 并发编程之 asyncio">
+                  Python 并发编程之 asyncio <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9f39aec58d3f9f091e56c6a40e903805"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

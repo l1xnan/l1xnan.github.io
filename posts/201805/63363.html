@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前置条件：安装 git，nodejs 初始化123npm install -g hexohexo init &lt;folder&gt;cd &lt;folder&gt;  12npm installnpm install -D hexo-deployer-git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录本次建站配置过程">
+<meta property="og:url" content="https://l1xnan.github.io/posts/201805/63363.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="前置条件：安装 git，nodejs 初始化123npm install -g hexohexo init &lt;folder&gt;cd &lt;folder&gt;  12npm installnpm install -D hexo-deployer-git">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-05-26T00:28:51.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.840Z">
+<meta property="article:author" content="l1xnan">
+<meta property="article:tag" content="备忘录">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/201805/63363.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/201805/63363.html","path":"posts/201805/63363.html","title":"记录本次建站配置过程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记录本次建站配置过程 | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-%E7%9B%B8%E5%85%B3"><span class="nav-number">2.1.</span> <span class="nav-text">git 相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">修改配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E4%BB%BD%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">备份源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%9C%B0%E6%9B%B4%E6%96%B0"><span class="nav-number">4.</span> <span class="nav-text">异地更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">修改主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="nav-number">5.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">5.2.</span> <span class="nav-text">修改配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E4%B8%BB%E9%A2%98"><span class="nav-number">5.3.</span> <span class="nav-text">升级主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B0%B8%E4%B9%85%E9%93%BE%E6%8E%A5"><span class="nav-number">5.4.</span> <span class="nav-text">永久链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%B8%BB%E9%A2%98%E6%8E%A8%E8%8D%90"><span class="nav-number">5.5.</span> <span class="nav-text">其他主题推荐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E4%BD%93%E9%AA%8C"><span class="nav-number">6.</span> <span class="nav-text">优化体验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="nav-number">7.</span> <span class="nav-text">基础操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">问题处理</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/201805/63363.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记录本次建站配置过程 | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录本次建站配置过程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-05-26 00:28:51" itemprop="dateCreated datePublished" datetime="2018-05-26T00:28:51+00:00">2018-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>前置条件：安装 <code>git</code>，<code>nodejs</code></p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo</span><br><span class="line">hexo init &lt;folder&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install -D hexo-deployer-git</span><br></pre></td></tr></tbody></table></figure>
+
+<span id="more"></span>
+
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="git-相关"><a href="#git-相关" class="headerlink" title="git 相关"></a>git 相关</h3><p><code>gitee.com/&lt;username&gt;</code> 上创建 <code>&lt;username&gt;</code> 同名仓库：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gitee.com/&lt;username&gt;/&lt;username&gt;.git</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://gitee.com/&lt;username&gt;/&lt;username&gt;.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>branch</code> 可以是 <code>master</code> 分支，也可以是自定义的其他分支（如：<code>gh-pages</code>）</p>
+<p>部署上传</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></tbody></table></figure>
+
+<p>地址：<code>https://&lt;username&gt;.gitee.io</code>，即为你的 <code>Pages</code> 页地址。</p>
+<h2 id="备份源文件"><a href="#备份源文件" class="headerlink" title="备份源文件"></a>备份源文件</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git remote add origin &lt;git-repo-url&gt;</span><br><span class="line">git checkout -b src</span><br><span class="line">git add .</span><br><span class="line">git commit -m "初始化"</span><br><span class="line">git push origin src</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中 <code>&lt;git-repo-url&gt;</code> 可以与 <code>_config.yml</code> 配置文件中，博客静态文件的 <code>deploy/repo</code> 相同，也可以是自己其他私有仓库的地址，避免直接公开博客源文件。</p>
+<h2 id="异地更新"><a href="#异地更新" class="headerlink" title="异地更新"></a>异地更新</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone &lt;git-repo-url&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>重复<code>初始化</code></p>
+<h2 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h2><h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd hexo</span><br><span class="line">$ git clone https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>修改 <code>_config.yml</code> 配置文件：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 修改语言为中文，注意是 zh-CN</span><br><span class="line">language: zh-CN</span><br></pre></td></tr></tbody></table></figure>
+
+<p>新建文件：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source/_data/next.yml</span><br></pre></td></tr></tbody></table></figure>
+
+<p>复制 <code>themes/next/_config.yml</code> 内的文件至 <code>next.yml</code>，然后修改 <code>next.yml</code> 文件。</p>
+<p>选择 主题：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设置 语言：</p>
+<p>（注意 <code>NexT 6.0</code> 以上版本语言配置是 <code>zh-CN</code>，而不是 <code>zh-Hans</code>）</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-CN</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设置 菜单：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line">hexo new page about</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>tags</code> 用于给文章打标签，比较详细，具体到你文档的知识点标签。例如：是介绍 <code>闭包</code>，还是介绍<code>作用域</code>；</li>
+<li><code>categories</code> 用于给文章设置分类，相对笼统。例如：这篇文章是介绍 <code>JavaScript</code> 语言相关知识的，还是介绍 <code>Python</code> 相关方面知识的，是 <code>前端</code>，还是<code>后端</code>；</li>
+<li><code>about</code> 是博客的介绍页。</li>
+</ul>
+<p>修改对应生成的文件：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># /source/tags/index.md</span><br><span class="line">title: 标签</span><br><span class="line">type: "tags"</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># /source/categories/index.md</span><br><span class="line">title: "分类"</span><br><span class="line">type: "categories"</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># /source/about/index.md</span><br><span class="line">title: 关于</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意文章头中 <code>tags</code> 和 <code>categories</code> 的书写：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title: 记录本次建站配置过程</span><br><span class="line">date: 2018-05-26 00:28:51</span><br><span class="line">tags:</span><br><span class="line">  - 标签1</span><br><span class="line">  - 标签2</span><br><span class="line">categories:</span><br><span class="line">  - 一级分类</span><br><span class="line">  - 二级分类</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述 <code>标签1</code> 、<code>标签2</code> 是一个列表，相互之间没有从属。而 <code>一级分类</code>、<code>二级分类</code> 是有从属或者是层级关系的。</p>
+<h3 id="升级主题"><a href="#升级主题" class="headerlink" title="升级主题"></a>升级主题</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd themes/next</span><br><span class="line">$ git pull</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="永久链接"><a href="#永久链接" class="headerlink" title="永久链接"></a>永久链接</h3><p>hexo 自动生成的链接规则为：<code>:year/:month/:day/:title</code>，特别是 <code>:title</code>，会造成生成的链接非常长，更何况其中包含中文字符时，官方的方案会更加让人难以忍受。幸好有大神也有这样的痛点，写了插件：<code>hexo-abbrlink</code>，使用上很简单：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-abbrlink</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后编辑配置文件 <code>_config.yml</code> 的 <code>permalink</code> 参数：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">permalink: posts/:abbrlink.html</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当然你也可以根据自己的需求自定，如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">permalink: posts/:year:month:abbrlink.html</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>:abbrlink</code> 的生成规则及其他配置请参看<a target="_blank" rel="noopener" href="https://github.com/rozbo/hexo-abbrlink">项目文档</a> 。</p>
+<h3 id="其他主题推荐"><a href="#其他主题推荐" class="headerlink" title="其他主题推荐"></a>其他主题推荐</h3><p><code>hexo-theme-material</code>：<a target="_blank" rel="noopener" href="https://github.com/viosey/hexo-theme-material">https://github.com/viosey/hexo-theme-material</a></p>
+<h2 id="优化体验"><a href="#优化体验" class="headerlink" title="优化体验"></a>优化体验</h2><p>如果用 VSCode 作为博客的编辑器，可以隐藏一些不必要的文件（如：配置完成后隐藏配置文件）来优化体验。一般情况下，撰写博客文章，并不会一下子写完，如果后期灵感迸发，我们还会进一步修改文章，为了更快的找到我们最近编辑的文件，我们可以让我们的文件按照最后的修改时间排序，便于我们找到最新编辑的文件。综上，可在<code>工作区配置</code>中添加如下配置：</p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"files.exclude"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"**/.git"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"**/.deploy*"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"**/node_modules"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"*.json"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"*.lock"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"themes"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"source/_data"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"public"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"explorer.sortOrder"</span><span class="punctuation">:</span> <span class="string">"modified"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>安装插件：</p>
+<ul>
+<li>Markdown All in One</li>
+<li>vscode-hexo</li>
+</ul>
+<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><p>生成和部署</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></tbody></table></figure>
+
+<p>生成和启动测试服务器</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s -g</span><br></pre></td></tr></tbody></table></figure>
+
+<p>按照模板生成文章</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new "您的文章标题"</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><p>windows 下 git 出现恼人的 <code>warning: LF will be replaced by CRLF</code> 警告，修改 <code>git</code> 配置：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf false</span><br></pre></td></tr></tbody></table></figure>
+
+<p>若不想全局更换 <code>autocrlf</code> 配置，可局部配置：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> .\.deploy_git\</span><br><span class="line">git config --edit</span><br></pre></td></tr></tbody></table></figure>
+
+<p>编辑配置文件，添加如下配置：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">    autocrlf = false</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行命令：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></tbody></table></figure>
+
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/">NexT 主题文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%87%E5%BF%98%E5%BD%95/" rel="tag"># 备忘录</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/201805/16107.html" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/201805/57001.html" rel="next" title="VSCode 配置">
+                  VSCode 配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"3061b88424b3310215a4e2c1ef434363"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

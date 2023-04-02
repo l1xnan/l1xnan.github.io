@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="数据库查询Document 对象有一个 objects 属性，用来访问在数据库中跟这个类有关的对象。这个 objects 属性其实是一个 QuerySetManager ，它会创建和返回一个新的 QuerySet 对象的访问。这个 QuerySet 对象可以从数据库中遍历获取的文档： 123# Prints out the names of all the users in the databas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoEngine 查询">
+<meta property="og:url" content="https://l1xnan.github.io/posts/201807/62733.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="数据库查询Document 对象有一个 objects 属性，用来访问在数据库中跟这个类有关的对象。这个 objects 属性其实是一个 QuerySetManager ，它会创建和返回一个新的 QuerySet 对象的访问。这个 QuerySet 对象可以从数据库中遍历获取的文档： 123# Prints out the names of all the users in the databas">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-16T02:02:22.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.828Z">
+<meta property="article:author" content="l1xnan">
+<meta property="article:tag" content="MongoDB">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="ORM">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/201807/62733.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/201807/62733.html","path":"posts/201807/62733.html","title":"MongoEngine 查询"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MongoEngine 查询 | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">数据库查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.</span> <span class="nav-text">过滤查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">1.2.</span> <span class="nav-text">查询操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.1.</span> <span class="nav-text">字符串查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%B0%E7%90%86%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.2.</span> <span class="nav-text">地理查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.3.</span> <span class="nav-text">列表查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.4.</span> <span class="nav-text">原始查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E5%92%8C%E8%B7%B3%E8%BF%87%E7%BB%93%E6%9E%9C"><span class="nav-number">1.3.</span> <span class="nav-text">限制和跳过结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4Document-%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.4.</span> <span class="nav-text">默认 Document 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-QuerySets"><span class="nav-number">1.5.</span> <span class="nav-text">自定义 QuerySets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Aggregation-%E8%81%9A%E5%90%88"><span class="nav-number">1.6.</span> <span class="nav-text">Aggregation 聚合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E8%AE%A1%E6%95%B0"><span class="nav-number">1.6.1.</span> <span class="nav-text">结果计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E5%8A%9F%E8%83%BD"><span class="nav-number">1.6.2.</span> <span class="nav-text">更多功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E5%92%8C%E6%80%A7%E8%83%BD"><span class="nav-number">1.7.</span> <span class="nav-text">查询效率和性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.8.</span> <span class="nav-text">高级查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atomic-updates%EF%BC%88%E5%8E%9F%E5%AD%90%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="nav-number">1.9.</span> <span class="nav-text">Atomic updates（原子更新）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF-JavaScript-%E6%89%A7%E8%A1%8C"><span class="nav-number">1.10.</span> <span class="nav-text">服务器端 JavaScript 执行</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/201807/62733.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MongoEngine 查询 | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MongoEngine 查询
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-16 02:02:22" itemprop="dateCreated datePublished" datetime="2018-07-16T02:02:22+00:00">2018-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MongoDB/" itemprop="url" rel="index"><span itemprop="name">MongoDB</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="数据库查询"><a href="#数据库查询" class="headerlink" title="数据库查询"></a>数据库查询</h2><p><code>Document</code> 对象有一个 <code>objects</code> 属性，用来访问在数据库中跟这个类有关的对象。这个 <code>objects</code> 属性其实是一个 <code>QuerySetManager</code> ，它会创建和返回一个新的 <code>QuerySet</code> 对象的访问。这个 <code>QuerySet</code> 对象可以从数据库中遍历获取的文档：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Prints out the names of all the users in the database</span></span><br><span class="line"><span class="keyword">for</span> user <span class="keyword">in</span> User.objects:</span><br><span class="line">    <span class="built_in">print</span> user.name</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="过滤查询"><a href="#过滤查询" class="headerlink" title="过滤查询"></a>过滤查询</h3><p>可以通过调用 <code>QuerySet</code> 对象的关键字参数来对数据查询进行过滤，关键字查询中的键和你想要查询的 <code>Document</code> 中的字段一致：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This will return a QuerySet that will only iterate over users whose</span></span><br><span class="line"><span class="comment"># 'country' field is set to 'uk'</span></span><br><span class="line">uk_users = User.objects(country=<span class="string">'uk'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于内嵌 document 的字段可以使用 <code>__</code> 来代替对象属性访问语法中的 <code>.</code> 进行访问：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This will return a QuerySet that will only iterate over pages that have</span></span><br><span class="line"><span class="comment"># been written by a user whose 'country' field is set to 'uk'</span></span><br><span class="line">uk_pages = Page.objects(author__country=<span class="string">'uk'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<span id="more"></span>
+
+<h3 id="查询操作符"><a href="#查询操作符" class="headerlink" title="查询操作符"></a>查询操作符</h3><p>在查询中也可以使用操作符，只要将其加在关键字的双下划线之后即可：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Only find users whose age is 18 or less</span></span><br><span class="line">young_users = Users.objects(age__lte=<span class="number">18</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可用的运算符如下：</p>
+<ul>
+<li><code>ne</code>&nbsp;– 不等于<code>≠</code></li>
+<li><code>lt</code>&nbsp;– 小于 <code>&lt;</code></li>
+<li><code>lte</code>&nbsp;– 小于等于<code>≤</code></li>
+<li><code>gt</code>&nbsp;– 大于 <code>&gt;</code></li>
+<li><code>gte</code>&nbsp;– 大于等于 <code>≥</code></li>
+<li><code>not</code>&nbsp;– 否定一个标准的检查，需要用在其他操作符之前 (e.g.&nbsp;<code>Q(age__not__mod=5)</code>)</li>
+<li><code>in</code>&nbsp;– 值在 <code>list</code> 中</li>
+<li><code>nin</code>&nbsp;– 值不在 <code>list</code> 中</li>
+<li><code>mod</code>&nbsp;–&nbsp;<code>value % x == y</code>, 其中 &nbsp;<code>x</code>&nbsp; 和 <code>y</code>&nbsp; 为给定的值</li>
+<li><code>all</code>&nbsp;– <code>list</code> 里面所有的值</li>
+<li><code>size</code>&nbsp;– 数组的大小</li>
+<li><code>exists</code>&nbsp;– 存在这个值</li>
+</ul>
+<h4 id="字符串查询"><a href="#字符串查询" class="headerlink" title="字符串查询"></a>字符串查询</h4><p>以下操作符可以快捷的进行正则查询：</p>
+<ul>
+<li><code>exact</code>&nbsp;– 字符串型字段完全匹配这个值</li>
+<li><code>iexact</code>&nbsp;– 字符串型字段完全匹配这个值（大小写敏感）</li>
+<li><code>contains</code>&nbsp;– 字符串字段包含这个值</li>
+<li><code>icontains</code>&nbsp;– 字符串字段包含这个值（大小写敏感）</li>
+<li><code>startswith</code>&nbsp;– 字符串字段由这个值开头</li>
+<li><code>istartswith</code>&nbsp;– 字符串字段由这个值开头（大小写敏感）</li>
+<li><code>endswith</code>&nbsp;– 字符串字段由这个值结尾</li>
+<li><code>iendswith</code>&nbsp;– 字符串字段由这个值结尾（大小写敏感）</li>
+<li><code>match</code>&nbsp;– 执行 <code>$elemMatch</code> 操作，所以你可以使用一个数组中的 document 实例</li>
+</ul>
+<h4 id="地理查询"><a href="#地理查询" class="headerlink" title="地理查询"></a>地理查询</h4><p>PASS</p>
+<h4 id="列表查询"><a href="#列表查询" class="headerlink" title="列表查询"></a>列表查询</h4><p>对于大多数字段，这种语法会查询出那些字段与给出的值相匹配的 document，但是当一个字段引用 <code>ListField</code> 的时候，而只会提供一条数据，那么包含这条数据的就会被匹配上：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Page</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">    tags = ListField(StringField())</span><br><span class="line"></span><br><span class="line"><span class="comment"># This will match all pages that have the word 'coding' as an item in the</span></span><br><span class="line"><span class="comment"># 'tags' list</span></span><br><span class="line">Page.objects(tags=<span class="string">'coding'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="原始查询"><a href="#原始查询" class="headerlink" title="原始查询"></a>原始查询</h4><p>你可以通过 <code>__raw__</code> 参数来使用一个原始的 <code>PyMongo</code> 语句来进行查询，这样可以进行原始的完整查询：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Page.objects(__raw__={<span class="string">'tags'</span>: <span class="string">'coding'</span>})</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="限制和跳过结果"><a href="#限制和跳过结果" class="headerlink" title="限制和跳过结果"></a>限制和跳过结果</h3><p>就像传统的 ORM 一样，你有时候需要限制返回的结果的数量，或者需要跳过一定数量的结果。<code>QuerySet</code> 里面可以使用 <code>limit()</code> 和 <code>skip()</code> 这两个方法来实现，但是更推荐使用数组切割的语法：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Only the first 5 people</span></span><br><span class="line">users = User.objects[:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># All except for the first 5 people</span></span><br><span class="line">users = User.objects[<span class="number">5</span>:]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5 users, starting from the 11th user found</span></span><br><span class="line">users = User.objects[<span class="number">10</span>:<span class="number">15</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>你可以指定让查询返回一个结果。如果这个条在数据库中不存在，那么会引发 <code>IndexError</code> 错误 。使用 <code>first()</code> 方法在数据不存在的时候会返回 <code>None</code>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Make sure there are no users</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>User.drop_collection()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>User.objects[<span class="number">0</span>]</span><br><span class="line">IndexError: <span class="built_in">list</span> index out of <span class="built_in">range</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>User.objects.first() == <span class="literal">None</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>User(name=<span class="string">'Test User'</span>).save()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>User.objects[<span class="number">0</span>] == User.objects.first()</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="默认Document-查询"><a href="#默认Document-查询" class="headerlink" title="默认Document 查询"></a>默认 <code>Document</code> 查询</h3><p>默认情况下，<code>Document</code> 的 <code>objects</code> 属性返回一个一个 <code>QuerySet</code> 对象，它并没有进行任何筛选和过滤，它返回的是所有的数据对象。这一点可以通过给一个 <code>document</code> 定义一个方法来修改 一个 <code>queryset</code> 。这个方法需要两参数<code>__doc_cls</code> 和 <code>queryset</code> 。第一个参数是定义这个方法的 <code>Document</code> 类名（从这个意义上来说，这个方法像是一个 <code>classmethod()</code> 而不是一般的方法），第二个参数是初始化的 <code>queryset</code>。这个方法需要使用 <code>queryset_manager()</code> 来装饰来它，使得它被认可。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BlogPost</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">    title = StringField()</span><br><span class="line">    date = DateTimeField()</span><br><span class="line"></span><br><span class="line"><span class="meta">    @queryset_manager</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">objects</span>(<span class="params">doc_cls, queryset</span>):</span><br><span class="line">        <span class="comment"># This may actually also be done by defining a default ordering for</span></span><br><span class="line">        <span class="comment"># the document, but this illustrates the use of manager methods</span></span><br><span class="line">        <span class="keyword">return</span> queryset.order_by(<span class="string">'-date'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>你不用调用 <code>objects</code> 方法，你可以自定义更多的管理方法，例如：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BlogPost</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">    title = StringField()</span><br><span class="line">    published = BooleanField()</span><br><span class="line"></span><br><span class="line"><span class="meta">    @queryset_manager</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">live_posts</span>(<span class="params">doc_cls, queryset</span>):</span><br><span class="line">        <span class="keyword">return</span> queryset.<span class="built_in">filter</span>(published=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">BlogPost(title=<span class="string">'test1'</span>, published=<span class="literal">False</span>).save()</span><br><span class="line">BlogPost(title=<span class="string">'test2'</span>, published=<span class="literal">True</span>).save()</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">len</span>(BlogPost.objects) == <span class="number">2</span></span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">len</span>(BlogPost.live_posts()) == <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="自定义-QuerySets"><a href="#自定义-QuerySets" class="headerlink" title="自定义 QuerySets"></a>自定义 QuerySets</h3><p>当你想自己定义一些方法来过滤 <code>document</code> 的时候，继承 <code>QuerySet</code> 类对你来说就是个好的方法。为了在 <code>document</code> 里面使用一个自定义的 <code>QuerySet</code> 类，你可以在 <code>document</code> 里的 <code>meta</code> 字典里设置 <code>queryset_class</code> 的值来实现它。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AwesomerQuerySet</span>(<span class="title class_ inherited__">QuerySet</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_awesome</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.<span class="built_in">filter</span>(awesome=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Page</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">    meta = {<span class="string">'queryset_class'</span>: AwesomerQuerySet}</span><br><span class="line"></span><br><span class="line"><span class="comment"># To call:</span></span><br><span class="line">Page.objects.get_awesome()</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Aggregation-聚合"><a href="#Aggregation-聚合" class="headerlink" title="Aggregation 聚合"></a>Aggregation 聚合</h3><p>MongoDB 提供了开箱即用的聚合方法，但没有 RDBMS 提供的那样多。MongoEngine 提供了一个包装过的内置的方法，同时自身提供了一些方法，它实现了在数据库服务上执行的 Javascript 代码的功能。</p>
+<h4 id="结果计数"><a href="#结果计数" class="headerlink" title="结果计数"></a>结果计数</h4><p>就像限制和跳过结果一样， <code>QuerySet</code> 对象提供了用来计数的方法 - <code>count()</code>，不过还有一个更 <code>Pythonic</code> 的方法来实现：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_users = <span class="built_in">len</span>(User.objects)</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h4><p>当你想为 <code>document</code> 的特定的字段的数量计数的时候，可以使用 <code>sum()</code>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yearly_expense = Employee.objects.<span class="built_in">sum</span>(<span class="string">'salary'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当你想求某个字段的平均值的时候，可以使用 <code>average()</code>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mean_age = User.objects.average(<span class="string">'age'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>MongoEngine 提供了一个方法来获取一个在集合里 <code>item</code> 的频率 - <code>item_frequencies()</code>。下面一个例子可以生成 <code>tag-clouds</code>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Article</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">    tag = ListField(StringField())</span><br><span class="line"></span><br><span class="line"><span class="comment"># After adding some tagged articles...</span></span><br><span class="line">tag_freqs = Article.objects.item_frequencies(<span class="string">'tag'</span>, normalize=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line">top_tags = <span class="built_in">sorted</span>(tag_freqs.items(), key=itemgetter(<span class="number">1</span>), reverse=<span class="literal">True</span>)[:<span class="number">10</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查询效率和性能"><a href="#查询效率和性能" class="headerlink" title="查询效率和性能"></a>查询效率和性能</h3><p>PASS</p>
+<h3 id="高级查询"><a href="#高级查询" class="headerlink" title="高级查询"></a>高级查询</h3><p>有时候使用关键字参数返回的 <code>QuerySet</code> 不能完全满足你的查询需要。例如有时候你需要将约束条件进行 <code>and</code>，<code>or</code> 的操作。你可以使用 MongoEngine 提供的 <code>Q</code> 类来实现，一个 <code>Q</code> 类代表了一个查询的一部分，里面的参数设置与你查询 <code>document</code> 的时候相同。建立一个复杂查询的时候，你需要用 <code>&amp;</code> 或 <code>|</code> 操作符将 <code>Q</code> 对象连结起来。例如：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mongoengine.queryset.visitor <span class="keyword">import</span> Q</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get published posts</span></span><br><span class="line">Post.objects(Q(published=<span class="literal">True</span>) | Q(publish_date__lte=datetime.now()))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get top posts</span></span><br><span class="line">Post.objects((Q(featured=<span class="literal">True</span>) &amp; Q(hits__gte=<span class="number">1000</span>)) | Q(hits__gte=<span class="number">5000</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Atomic-updates（原子更新）"><a href="#Atomic-updates（原子更新）" class="headerlink" title="Atomic updates（原子更新）"></a>Atomic updates（原子更新）</h3><p><code>MongoDB 文档</code> 可以通过 <code>QuerySet</code> 上的 <code>update_one()</code>、<code>update()</code>、<code>modify()</code> 方法自动更新。下面几种操作符可以被用到这几种方法上：</p>
+<ul>
+<li><code>set</code>&nbsp;– 设置成一个指定的值</li>
+<li><code>unset</code>&nbsp;– 删除一个指定的值</li>
+<li><code>inc</code>&nbsp;– 将值加上一个给定的数</li>
+<li><code>dec</code>&nbsp;– 将值减去一个给定的数</li>
+<li><code>push</code>&nbsp;– 在 <code>list</code> 中添加一个值</li>
+<li><code>push_all</code>&nbsp;– 在 <code>list</code> 中添加一个值</li>
+<li><code>pop</code>&nbsp;– 移除 <code>list</code> 的第一项或最后一项（根据 <code>pop__&lt;field&gt;=val</code> 中 <code>val</code> 的值决定删除第一项还是最后一项，一般情况下，<code>val</code> 为负则删除第一项，为正则删除最后一项，参见：<a target="_blank" rel="noopener" href="http://docs.mongodb.org/manual/reference/operator/update/pop/">mongodb $pop</a></li>
+<li><code>pull</code>&nbsp;– 从 <code>list</code> 里面移除一个值</li>
+<li><code>pull_all</code>&nbsp;– 从 <code>list</code> 里面移除个值</li>
+<li><code>add_to_set</code>&nbsp;– 当要添加的值不在 <code>list</code> 中时，添加这个值</li>
+</ul>
+<p>原子更新的语法类似于查询语法，区别在于修饰操作符位于字段之前，而不是之后：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>post = BlogPost(title=<span class="string">'Test'</span>, page_views=<span class="number">0</span>, tags=[<span class="string">'database'</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.save()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>BlogPost.objects(<span class="built_in">id</span>=post.<span class="built_in">id</span>).update_one(inc__page_views=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.reload()  <span class="comment"># the document has been changed, so we need to reload it</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.page_views</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>BlogPost.objects(<span class="built_in">id</span>=post.<span class="built_in">id</span>).update_one(set__title=<span class="string">'Example Post'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.reload()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.title</span><br><span class="line"><span class="string">'Example Post'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>BlogPost.objects(<span class="built_in">id</span>=post.<span class="built_in">id</span>).update_one(push__tags=<span class="string">'nosql'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.reload()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>post.tags</span><br><span class="line">[<span class="string">'database'</span>, <span class="string">'nosql'</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果没有修饰操作符，则默认为 <code>$set</code>：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BlogPost.objects(<span class="built_in">id</span>=post.<span class="built_in">id</span>).update(title=<span class="string">'Example Post'</span>)</span><br><span class="line">BlogPost.objects(<span class="built_in">id</span>=post.<span class="built_in">id</span>).update(set__title=<span class="string">'Example Post'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="服务器端-JavaScript-执行"><a href="#服务器端-JavaScript-执行" class="headerlink" title="服务器端 JavaScript 执行"></a>服务器端 JavaScript 执行</h3><p>可以写 Javascript 函数，然后发送到服务器来执行。它返回结果是 Javascript 函数的返回值。这个功能是通过 <code>QuerySet()</code> 对象的 <code>exec_js()</code> 方法实现。传递一个包含一个 Javascript 函数的字符串作为第一个参数。</p>
+<p>其余位置的参数的名字字段将作为您的 Javascript 函数的参数传递过去。</p>
+<p>在 JavaScript 函数范围中，一些变量可用：</p>
+<ul>
+<li><code>collection</code>&nbsp;– 对应使用的 <code>Document</code> 类的集合的名称</li>
+<li><code>query</code>&nbsp;– 一个 &nbsp;<code>QuerySet</code> 对象</li>
+<li><code>options</code>&nbsp;– 一个对象，它包含要传递给 <code>exec_js()</code> 函数的一些参数 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sum_field</span>(<span class="params">document, field_name, include_negatives=<span class="literal">True</span></span>):</span><br><span class="line">    code = <span class="string">"""</span></span><br><span class="line"><span class="string">    function(sumField) {</span></span><br><span class="line"><span class="string">        var total = 0.0;</span></span><br><span class="line"><span class="string">        db[collection].find(query).forEach(function(doc) {</span></span><br><span class="line"><span class="string">            var val = doc[sumField];</span></span><br><span class="line"><span class="string">            if (val &gt;= 0.0 || options.includeNegatives) {</span></span><br><span class="line"><span class="string">                total += val;</span></span><br><span class="line"><span class="string">            }</span></span><br><span class="line"><span class="string">        });</span></span><br><span class="line"><span class="string">        return total;</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    options = {<span class="string">'includeNegatives'</span>: include_negatives}</span><br><span class="line">    <span class="keyword">return</span> document.objects.exec_js(code, field_name, **options)</span><br></pre></td></tr></tbody></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MongoDB/" rel="tag"># MongoDB</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/ORM/" rel="tag"># ORM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/201807/11156.html" rel="prev" title="好用的命令行软件">
+                  <i class="fa fa-chevron-left"></i> 好用的命令行软件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/201807/15308.html" rel="next" title="Python 命令行神器 Click（一）快速上手">
+                  Python 命令行神器 Click（一）快速上手 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1a2ad8de7ebfd9ab70b55cc802ec35a6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

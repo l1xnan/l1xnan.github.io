@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"l1xnan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="为什么引入 async&#x2F;await关于 async&#x2F;await 最初的提案，参见：PEP492 以及它的中文翻译。 具体细节我们先不做了解，先看一下增加 async&#x2F;await 解决了什么问题（引自翻译）： 在以前，我们可以用生成器实现协程（PEP 342），后来又对其进行了改进，引入了 yield from 语法（PEP 380）。但仍有一些缺点：  协程和普通生成器使用相同的语法，所以很容易把">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 协程与 async&#x2F;await">
+<meta property="og:url" content="https://l1xnan.github.io/posts/201807/59429.html">
+<meta property="og:site_name" content="每天进步一点点">
+<meta property="og:description" content="为什么引入 async&#x2F;await关于 async&#x2F;await 最初的提案，参见：PEP492 以及它的中文翻译。 具体细节我们先不做了解，先看一下增加 async&#x2F;await 解决了什么问题（引自翻译）： 在以前，我们可以用生成器实现协程（PEP 342），后来又对其进行了改进，引入了 yield from 语法（PEP 380）。但仍有一些缺点：  协程和普通生成器使用相同的语法，所以很容易把">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-10T19:25:42.000Z">
+<meta property="article:modified_time" content="2023-04-02T12:50:46.828Z">
+<meta property="article:author" content="l1xnan">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="协程">
+<meta property="article:tag" content="异步">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://l1xnan.github.io/posts/201807/59429.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://l1xnan.github.io/posts/201807/59429.html","path":"posts/201807/59429.html","title":"Python 协程与 async/await"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 协程与 async/await | 每天进步一点点</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">每天进步一点点</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%95%E5%85%A5-async-x2F-await"><span class="nav-number">1.</span> <span class="nav-text">为什么引入 async&#x2F;await</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E5%86%85%E5%AE%B9"><span class="nav-number">2.</span> <span class="nav-text">详细内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-coroutine"><span class="nav-number">2.2.</span> <span class="nav-text">types.coroutine()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">await 表达式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">l1xnan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/l1xnan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/l1xnan" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;l1xnan" rel="noopener me" target="_blank"><i class="fa fa-crow fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l1xnan.github.io/posts/201807/59429.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="l1xnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python 协程与 async/await | 每天进步一点点">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 协程与 async/await
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-10 19:25:42" itemprop="dateCreated datePublished" datetime="2018-07-10T19:25:42+00:00">2018-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-04-02 12:50:46" itemprop="dateModified" datetime="2023-04-02T12:50:46+00:00">2023-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>915</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="为什么引入-async-x2F-await"><a href="#为什么引入-async-x2F-await" class="headerlink" title="为什么引入 async/await"></a>为什么引入 async/await</h2><p>关于 async/await 最初的提案，参见：<a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0492/">PEP492</a> 以及它的<a target="_blank" rel="noopener" href="http://www.cnblogs.com/animalize/p/4738941.html">中文翻译</a>。</p>
+<p>具体细节我们先不做了解，先看一下增加 async/await 解决了什么问题（引自翻译）：</p>
+<p>在以前，我们可以用生成器实现协程（PEP 342），后来又对其进行了改进，引入了 <code>yield from</code> 语法（PEP 380）。但仍有一些缺点：</p>
+<ul>
+<li>协程和普通生成器使用相同的语法，所以很容易把它们搞混，初学者更是如此。</li>
+<li>一个函数是否是一个协程，取决于它里面是否出现了 <code>yield</code> 或 <code>yield from</code> 语句。这并不明显，容易在重构函数的时候搞乱，导致出错。</li>
+<li>异步调用被 <code>yield</code> 语法限制了，我们不能获得、使用更多的语法特性，比如 <code>with</code> 和 <code>for</code>。</li>
+</ul>
+<p><strong>PEP492</strong> 把协程从生成器独立出来，成为 Python 的一个原生事物。这会消除协程和生成器之间的混淆，方便编写不依赖特定库的协程代码。也为 linter 和 IDE 进行代码静态分析提供了机会。</p>
+<p>使用原生协程和相应的新语法，我们可以在异步编程时使用上下文管理器（context manager）和迭代器。如下文所示，新的 async with 语句可以在进入、离开运行上下文（runtime context）时进行异步调用，而 async for 语句可以在迭代时进行异步调用。</p>
+<p>综上，虽然在 CPython 的内部实现，用 <code>def async</code> 定义的协程仍然是一个生成器，但是已经被封装好了，我们不用关心其晦涩的细节。添加 async/await 后我们编写异步协程程序会更加的容易、直观。同时增加异步迭代器 <code>async for</code> 和异步上下文管理器 <code>async with</code>，我们在编写异步程序将更加的方便。</p>
+<span id="more"></span>
+<h2 id="详细内容"><a href="#详细内容" class="headerlink" title="详细内容"></a>详细内容</h2><p>一般我们将新语法 async/await 定义的协程称为：原生协程；将传统方法实现的协程称为：生成器协程。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>使用如下语法声明原生协程：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_data</span>(<span class="params">db</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>协程语法有如下关键点：</p>
+<ul>
+<li><code>async def</code> 函数必定是协程，即使里面不含有 <code>await</code> 语句。</li>
+<li>如果在 async 函数里面使用 <code>yield</code> 或 <code>yield from</code> 语句，会引发 <code>SyntaxError</code> 异常。</li>
+<li>在 CPython 内部，引入两个新的代码对象标识（code object flags）：<ol>
+<li><code>CO_COROUTINE</code> 表示这是原生协程。（由新语法定义）</li>
+<li><code>CO_ITERABLE_COROUTINE</code> 表示这是用生成器实现的协程，但是和原生协程兼容。（用装饰器 <code>types.coroutine()</code> 装饰过的生成器协程）</li>
+</ol>
+</li>
+<li>调用一个普通生成器，返回一个生成器对象（generator object）；相应的，调用一个协程返回一个协程对象（coroutine object）。</li>
+<li>协程不再抛出 <code>StopIteration</code> 异常，作为替代会抛出 <code>RuntimeError</code> 异常。</li>
+<li>如果一个协程从未等待就被垃圾收集器销毁了，会引发一个 <code>RuntimeWarning</code> 异常。</li>
+</ul>
+<h3 id="types-coroutine"><a href="#types-coroutine" class="headerlink" title="types.coroutine()"></a>types.coroutine()</h3><p>types 模块添加了一个新函数 <code>coroutine(fn)</code>。“用生成器实现的协程” 和 “原生协程” 本身是不互通，不兼容的，使用它可以让两者之间的互操作。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@types.coroutine</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_data</span>(<span class="params">db</span>):</span><br><span class="line">    data = <span class="keyword">yield</span> <span class="keyword">from</span> read_data(db)</span><br><span class="line">    ...</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="await-表达式"><a href="#await-表达式" class="headerlink" title="await 表达式"></a>await 表达式</h3><p>新的 await 表达式用于获得协程执行的结果：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_data</span>(<span class="params">db</span>):</span><br><span class="line">    data = <span class="keyword">await</span> db.fetch(<span class="string">'SELECT ...'</span>)</span><br><span class="line">    ...</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>await</code> 和 <code>yield from</code> 类似，它挂起 <code>read_data</code> 的执行，直到 <code>db.fetch</code> 执行完毕并返回结果。</p>
+<p>以 CPython <code>内部，await</code> 使用了 <code>yield from</code> <code>的实现，但加入了一个额外步骤——验证它的参数类型。await</code> 只接受 <code>awaitable</code> 对象，<code>awaitable</code> 对象是以下的其中一个：</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%8D%8F%E7%A8%8B/" rel="tag"># 协程</a>
+              <a href="/tags/%E5%BC%82%E6%AD%A5/" rel="tag"># 异步</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/201807/29269.html" rel="prev" title="Python 库推荐">
+                  <i class="fa fa-chevron-left"></i> Python 库推荐
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/201807/63235.html" rel="next" title="更改 Ubuntu 上 Python 的默认版本">
+                  更改 Ubuntu 上 Python 的默认版本 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1xnan</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">24k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:29</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"l1xnan","repo":"l1xnan.github.io","client_id":"37939eb84870109799bc","client_secret":"ae57dbd36d282f5636c2dab7ae53661aee32e4ff","admin_user":"l1xnan","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"3f88da2be3293a200be25c2b7c5e1160"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
